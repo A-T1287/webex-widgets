@@ -244,45 +244,90 @@
         const contactsList = document.getElementById('contactsList');
         const statusBar = document.getElementById('statusBar');
 
-        // Initialize Desktop SDK - wait for Agent Desktop to inject it
+        // Initialize - try direct API call using session cookies
         async function initializeSDK() {
-            statusBar.textContent = 'Waiting for Agent Desktop SDK...';
+            statusBar.textContent = 'Connecting to Address Book API...';
+            console.log('Attempting direct API access...');
             
-            // Poll for SDK availability (Agent Desktop injects it into iframe)
-            let attempts = 0;
-            const maxAttempts = 20; // 10 seconds total
-            
-            const checkSDK = async () => {
-                attempts++;
+            // Try direct API call - Agent Desktop session should handle auth
+            try {
+                await loadAddressBookDirect();
+            } catch (error) {
+                console.error('Direct API access failed:', error);
+                statusBar.textContent = 'Trying SDK method...';
                 
+                // Fallback: check for SDK
                 if (window.agentx && window.agentx.desktop) {
                     console.log('Agent Desktop SDK found');
-                    statusBar.textContent = 'Connected to Agent Desktop';
-                    try {
-                        await window.agentx.desktop.actions.subscribeAll();
-                        await loadAddressBook();
-                    } catch (error) {
-                        console.error('SDK subscription error:', error);
-                        await loadAddressBook();
-                    }
-                    return;
-                }
-                
-                if (attempts >= maxAttempts) {
-                    console.warn('Agent Desktop SDK not available after timeout');
-                    statusBar.textContent = 'SDK timeout - using fallback';
+                    await loadAddressBook();
+                } else {
+                    console.warn('SDK not available, using sample data');
                     await loadAddressBookFallback();
-                    return;
                 }
-                
-                // Try again in 500ms
-                setTimeout(checkSDK, 500);
-            };
-            
-            checkSDK();
+            }
         }
         
-        // Load address book data
+        // Load address book directly using session cookies (no SDK needed)
+        async function loadAddressBookDirect() {
+            try {
+                // Try multiple API endpoint patterns
+                const endpoints = [
+                    `/address-book/v1/organizations/addressBooks/${ADDRESS_BOOK_ID}/addressBookEntries`,
+                    `/address-book/api/v1/addressBooks/${ADDRESS_BOOK_ID}/addressBookEntries`,
+                    `/ab/api/v1/address-books/${ADDRESS_BOOK_ID}/entries`
+                ];
+                
+                let data = null;
+                let lastError = null;
+                
+                for (const endpoint of endpoints) {
+                    try {
+                        console.log(`Trying endpoint: ${endpoint}`);
+                        const response = await fetch(endpoint, {
+                            method: 'GET',
+                            credentials: 'include', // Include cookies for authentication
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            data = await response.json();
+                            console.log('API call successful:', endpoint);
+                            break;
+                        } else {
+                            console.warn(`Endpoint ${endpoint} returned ${response.status}`);
+                            lastError = new Error(`HTTP ${response.status}`);
+                        }
+                    } catch (err) {
+                        console.warn(`Endpoint ${endpoint} failed:`, err);
+                        lastError = err;
+                    }
+                }
+                
+                if (!data) {
+                    throw lastError || new Error('All API endpoints failed');
+                }
+                
+                // Parse response
+                allContacts = data.data || data.addressBookEntries || data.entries || data || [];
+                
+                if (Array.isArray(allContacts) && allContacts.length > 0) {
+                    filteredContacts = [...allContacts];
+                    renderContacts();
+                    statusBar.textContent = `${allContacts.length} contacts loaded`;
+                } else {
+                    contactsList.innerHTML = '<div class="no-results">No contacts found in this address book.</div>';
+                    statusBar.textContent = 'Address book is empty';
+                }
+            } catch (error) {
+                console.error('Direct API call failed:', error);
+                throw error; // Re-throw to trigger fallback
+            }
+        }
+        
+        // Load address book data using SDK
         async function loadAddressBook() {
             try {
                 // Get auth token from SDK
@@ -381,15 +426,42 @@
         async function dialContact(event, number) {
             event.stopPropagation();
             try {
+                // Try SDK-based dialing first
                 if (window.agentx && window.agentx.desktop && window.agentx.desktop.dialer) {
                     await window.agentx.desktop.dialer.startOutdialContact(number);
                     statusBar.textContent = `Dialing ${number}...`;
+                    return;
+                }
+                
+                // Fallback: Try direct API call
+                const response = await fetch('/agentContact/outdial', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        destination: number,
+                        mediaType: 'telephony'
+                    })
+                });
+                
+                if (response.ok) {
+                    statusBar.textContent = `Dialing ${number}...`;
                 } else {
-                    statusBar.textContent = `Click-to-dial not available in this mode`;
+                    throw new Error(`Dial failed: ${response.status}`);
                 }
             } catch (error) {
                 console.error('Dial error:', error);
-                statusBar.textContent = `Failed to dial: ${error.message}`;
+                statusBar.textContent = `Copy number: ${number} (Auto-dial unavailable)`;
+                
+                // Copy to clipboard as fallback
+                try {
+                    await navigator.clipboard.writeText(number);
+                    statusBar.textContent = `${number} copied to clipboard!`;
+                } catch (clipError) {
+                    statusBar.textContent = `Click-to-dial unavailable: ${number}`;
+                }
             }
         }
         
