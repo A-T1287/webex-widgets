@@ -244,55 +244,44 @@
         const contactsList = document.getElementById('contactsList');
         const statusBar = document.getElementById('statusBar');
 
-        // Initialize Desktop SDK - try parent window first for iframe context
+        // Initialize Desktop SDK - wait for Agent Desktop to inject it
         async function initializeSDK() {
-            try {
-                // Check if SDK is available in current window
+            statusBar.textContent = 'Waiting for Agent Desktop SDK...';
+            
+            // Poll for SDK availability (Agent Desktop injects it into iframe)
+            let attempts = 0;
+            const maxAttempts = 20; // 10 seconds total
+            
+            const checkSDK = async () => {
+                attempts++;
+                
                 if (window.agentx && window.agentx.desktop) {
+                    console.log('Agent Desktop SDK found');
                     statusBar.textContent = 'Connected to Agent Desktop';
-                    await loadAddressBook();
+                    try {
+                        await window.agentx.desktop.actions.subscribeAll();
+                        await loadAddressBook();
+                    } catch (error) {
+                        console.error('SDK subscription error:', error);
+                        await loadAddressBook();
+                    }
                     return;
                 }
                 
-                // Try parent window (iframe context)
-                if (window.parent && window.parent.agentx && window.parent.agentx.desktop) {
-                    window.agentx = window.parent.agentx;
-                    statusBar.textContent = 'Connected to Agent Desktop (iframe)';
-                    await loadAddressBook();
+                if (attempts >= maxAttempts) {
+                    console.warn('Agent Desktop SDK not available after timeout');
+                    statusBar.textContent = 'SDK timeout - using fallback';
+                    await loadAddressBookFallback();
                     return;
                 }
                 
-                // Fallback: Load SDK dynamically
-                await loadSDKScript();
-                if (window.agentx && window.agentx.desktop) {
-                    await window.agentx.desktop.initialize();
-                    statusBar.textContent = 'Connected to Agent Desktop';
-                    await loadAddressBook();
-                } else {
-                    throw new Error('SDK not available');
-                }
-            } catch (error) {
-                console.error('SDK initialization error:', error);
-                statusBar.textContent = 'Using fallback mode...';
-                await loadAddressBookFallback();
-            }
+                // Try again in 500ms
+                setTimeout(checkSDK, 500);
+            };
+            
+            checkSDK();
         }
         
-        // Load SDK script dynamically
-        function loadSDKScript() {
-            return new Promise((resolve, reject) => {
-                if (window.agentx) {
-                    resolve();
-                    return;
-                }
-                const script = document.createElement('script');
-                script.src = 'https://cjaas.cisco.com/agentx/desktop-js-sdk.js';
-                script.onload = resolve;
-                script.onerror = reject;
-                document.head.appendChild(script);
-            });
-        }
-
         // Load address book data
         async function loadAddressBook() {
             try {
@@ -445,10 +434,7 @@
         }
 
         // Initialize when page loads
-        // Give the page a moment to load, then initialize
-        setTimeout(() => {
-            initializeSDK();
-        }, 500);
+        initializeSDK();
     </script>
 </body>
 </html>
