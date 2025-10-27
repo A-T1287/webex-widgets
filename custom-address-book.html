@@ -234,7 +234,6 @@
         Connecting to Contact Center...
     </div>
 
-    <script src="https://cjaas.cisco.com/agentx/desktop-js-sdk.js"></script>
     <script>
         const ADDRESS_BOOK_ID = 'a34d966f-6908-4334-be51-4ab77a8279bf';
         let allContacts = [];
@@ -245,26 +244,63 @@
         const contactsList = document.getElementById('contactsList');
         const statusBar = document.getElementById('statusBar');
 
-        // Initialize Desktop SDK
+        // Initialize Desktop SDK - try parent window first for iframe context
         async function initializeSDK() {
             try {
-                await window.agentxSDK.initialize();
-                statusBar.textContent = 'Connected to Agent Desktop';
-                await loadAddressBook();
+                // Check if SDK is available in current window
+                if (window.agentx && window.agentx.desktop) {
+                    statusBar.textContent = 'Connected to Agent Desktop';
+                    await loadAddressBook();
+                    return;
+                }
+                
+                // Try parent window (iframe context)
+                if (window.parent && window.parent.agentx && window.parent.agentx.desktop) {
+                    window.agentx = window.parent.agentx;
+                    statusBar.textContent = 'Connected to Agent Desktop (iframe)';
+                    await loadAddressBook();
+                    return;
+                }
+                
+                // Fallback: Load SDK dynamically
+                await loadSDKScript();
+                if (window.agentx && window.agentx.desktop) {
+                    await window.agentx.desktop.initialize();
+                    statusBar.textContent = 'Connected to Agent Desktop';
+                    await loadAddressBook();
+                } else {
+                    throw new Error('SDK not available');
+                }
             } catch (error) {
                 console.error('SDK initialization error:', error);
-                showError('Failed to connect to Agent Desktop SDK');
+                statusBar.textContent = 'Using fallback mode...';
+                await loadAddressBookFallback();
             }
+        }
+        
+        // Load SDK script dynamically
+        function loadSDKScript() {
+            return new Promise((resolve, reject) => {
+                if (window.agentx) {
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://cjaas.cisco.com/agentx/desktop-js-sdk.js';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
         }
 
         // Load address book data
         async function loadAddressBook() {
             try {
                 // Get auth token from SDK
-                const config = await window.agentxSDK.config.getConfig();
-                const token = config.authToken;
-                const orgId = config.orgId;
-                const baseUrl = config.api.addressBook || 'https://api.wxcc-us1.cisco.com';
+                const config = await window.agentx.desktop.configuration.get();
+                const token = config.accessToken || config.authToken;
+                const orgId = config.organizationId || config.orgId;
+                const baseUrl = 'https://api.wxcc-us1.cisco.com';
                 
                 // Fetch address book entries
                 const response = await fetch(`${baseUrl}/organization/${orgId}/address-book/${ADDRESS_BOOK_ID}/entries`, {
@@ -356,12 +392,30 @@
         async function dialContact(event, number) {
             event.stopPropagation();
             try {
-                await window.agentxSDK.dialer.startOutdial(number);
-                statusBar.textContent = `Dialing ${number}...`;
+                if (window.agentx && window.agentx.desktop && window.agentx.desktop.dialer) {
+                    await window.agentx.desktop.dialer.startOutdialContact(number);
+                    statusBar.textContent = `Dialing ${number}...`;
+                } else {
+                    statusBar.textContent = `Click-to-dial not available in this mode`;
+                }
             } catch (error) {
                 console.error('Dial error:', error);
                 statusBar.textContent = `Failed to dial: ${error.message}`;
             }
+        }
+        
+        // Fallback method to load address book without SDK
+        async function loadAddressBookFallback() {
+            // Use sample data for demonstration
+            allContacts = [
+                { id: '1', name: 'Sample Contact 1', phoneNumber: '+1-555-0001', firstName: 'Sample', lastName: 'Contact 1' },
+                { id: '2', name: 'Sample Contact 2', phoneNumber: '+1-555-0002', firstName: 'Sample', lastName: 'Contact 2' },
+                { id: '3', name: 'Sample Contact 3', phoneNumber: '+1-555-0003', firstName: 'Sample', lastName: 'Contact 3' }
+            ];
+            filteredContacts = [...allContacts];
+            renderContacts();
+            statusBar.textContent = `Sample data loaded (SDK not available)`;
+            showError('Could not connect to Agent Desktop SDK. Showing sample data. Please ensure this widget is loaded within Webex Contact Center Agent Desktop.');
         }
 
         // Select contact (for future use)
@@ -391,11 +445,10 @@
         }
 
         // Initialize when page loads
-        if (window.agentxSDK) {
+        // Give the page a moment to load, then initialize
+        setTimeout(() => {
             initializeSDK();
-        } else {
-            showError('Agent Desktop SDK not available. This widget must run inside Webex Contact Center Agent Desktop.');
-        }
+        }, 500);
     </script>
 </body>
 </html>
