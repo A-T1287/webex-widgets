@@ -29,16 +29,45 @@
     .hidden { display: none !important; }
     .no-results { text-align: center; color: #666; padding: 32px; }
     .status { padding: 8px 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
+    .debug { background: #f0f0f0; padding: 8px; margin-bottom: 12px; font-size: 11px; font-family: monospace; max-height: 150px; overflow-y: auto; }
   </style>
 </head>
 <body>
   <div class="header"><h3 style="margin:0; font-size:16px;">📞 Business Contacts</h3></div>
   <div id="status" class="status hidden"></div>
+  <div id="debug" class="debug hidden"></div>
   <div class="search-container">
     <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search by name or number..." oninput="filterContacts()">
   </div>
   <div id="noResults" class="no-results hidden">No contacts found</div>
   <div class="speed-dial-container" id="contactsContainer"></div>
+  
+  <!-- Load SDK from CDN -->
+  <script type="module">
+    import('https://cdn.jsdelivr.net/npm/@wxcc-desktop/sdk@latest/dist/index.js')
+      .then(module => {
+        window.WxCCSDK = module;
+        console.log('[Quick Dial] SDK loaded from CDN:', module);
+        window.initializeApp();
+      })
+      .catch(err => {
+        console.error('[Quick Dial] Failed to load SDK from CDN:', err);
+        // Try alternative CDN
+        return import('https://unpkg.com/@wxcc-desktop/sdk@latest/dist/index.js');
+      })
+      .then(module => {
+        if (module) {
+          window.WxCCSDK = module;
+          console.log('[Quick Dial] SDK loaded from alternative CDN:', module);
+          window.initializeApp();
+        }
+      })
+      .catch(err => {
+        console.error('[Quick Dial] All CDN attempts failed:', err);
+        window.initializeApp();
+      });
+  </script>
+  
   <script>
     const CONTACTS = [
 {
@@ -2168,50 +2197,81 @@
 ];
     let Desktop = null;
     let isSDKReady = false;
+    let debugLog = [];
 
-    // Initialize Webex Desktop SDK
+    function addDebug(msg) {
+      debugLog.push(`[${new Date().toLocaleTimeString()}] ${msg}`);
+      const debugEl = document.getElementById('debug');
+      debugEl.textContent = debugLog.join('\n');
+      debugEl.classList.remove('hidden');
+      console.log(msg);
+    }
+
+    // Initialize after SDK loads (or timeout)
+    window.initializeApp = async function() {
+      renderContacts();
+      await initSDK();
+    };
+
     async function initSDK() {
       try {
-        console.log('[Quick Dial] Initializing Webex Desktop SDK...');
-        console.log('[Quick Dial] Checking window object keys:', Object.keys(window));
+        addDebug('[Quick Dial] === SDK Initialization Start ===');
+        addDebug('[Quick Dial] Checking for SDK in multiple locations...');
         
-        // Try multiple ways to access the Desktop SDK
-        if (window.Desktop) {
-          Desktop = window.Desktop;
-          console.log('[Quick Dial] Found Desktop at window.Desktop');
-        } else if (window.WxCCDesktop && window.WxCCDesktop.Desktop) {
-          Desktop = window.WxCCDesktop.Desktop;
-          console.log('[Quick Dial] Found Desktop at window.WxCCDesktop.Desktop');
-        } else if (window.CiscoWxCCDesktop && window.CiscoWxCCDesktop.Desktop) {
-          Desktop = window.CiscoWxCCDesktop.Desktop;
-          console.log('[Quick Dial] Found Desktop at window.CiscoWxCCDesktop.Desktop');
-        } else if (window.parent && window.parent.Desktop) {
-          Desktop = window.parent.Desktop;
-          console.log('[Quick Dial] Found Desktop at window.parent.Desktop');
+        // Method 1: Check if loaded via CDN
+        if (window.WxCCSDK && window.WxCCSDK.Desktop) {
+          Desktop = window.WxCCSDK.Desktop;
+          addDebug('[Quick Dial] ✓ Found SDK from CDN: window.WxCCSDK.Desktop');
         }
-        
-        if (!Desktop) {
-          console.warn('[Quick Dial] Desktop object not found in any location');
-          console.log('[Quick Dial] Available window keys:', Object.keys(window).filter(k => k.includes('Desktop') || k.includes('Wx') || k.includes('Cisco')));
+        // Method 2: Check window.Desktop
+        else if (window.Desktop) {
+          Desktop = window.Desktop;
+          addDebug('[Quick Dial] ✓ Found SDK at window.Desktop');
+        }
+        // Method 3: Check Webex namespaces
+        else if (window.CiscoWxCCDesktop && window.CiscoWxCCDesktop.Desktop) {
+          Desktop = window.CiscoWxCCDesktop.Desktop;
+          addDebug('[Quick Dial] ✓ Found SDK at window.CiscoWxCCDesktop.Desktop');
+        }
+        // Method 4: Check for agentx
+        else if (window.agentx && window.agentx.desktop) {
+          Desktop = window.agentx.desktop;
+          addDebug('[Quick Dial] ✓ Found SDK at window.agentx.desktop');
+        }
+        else {
+          addDebug('[Quick Dial] ✗ SDK not found in any known location');
+          addDebug('[Quick Dial] Available window keys with "Desktop" or "agentx":');
+          const relevantKeys = Object.keys(window).filter(k => 
+            k.toLowerCase().includes('desktop') || 
+            k.toLowerCase().includes('agentx') ||
+            k.toLowerCase().includes('wx') ||
+            k.toLowerCase().includes('cisco')
+          );
+          addDebug(`  ${relevantKeys.join(', ') || 'none'}`);
           throw new Error('Desktop SDK not found');
         }
 
-        // Try to initialize if method exists
+        // Try to initialize
+        addDebug('[Quick Dial] SDK object found, checking methods...');
+        addDebug(`[Quick Dial] Desktop.config exists: ${!!(Desktop.config)}`);
+        addDebug(`[Quick Dial] Desktop.dialer exists: ${!!(Desktop.dialer)}`);
+        
         if (Desktop.config && typeof Desktop.config.init === 'function') {
+          addDebug('[Quick Dial] Calling Desktop.config.init()...');
           await Desktop.config.init();
-          console.log('[Quick Dial] Desktop.config.init() completed');
+          addDebug('[Quick Dial] ✓ Desktop.config.init() completed');
         }
         
         isSDKReady = true;
-        console.log('[Quick Dial] SDK initialized successfully');
-        console.log('[Quick Dial] Desktop object:', Desktop);
-        console.log('[Quick Dial] Desktop.dialer:', Desktop.dialer);
-        
+        addDebug('[Quick Dial] === SDK Ready ===');
         showStatus('✅ Connected to Cisco Agent Desktop', 'success');
-        setTimeout(() => hideStatus(), 3000);
+        setTimeout(() => {
+          hideStatus();
+          document.getElementById('debug').classList.add('hidden');
+        }, 5000);
         
       } catch (error) {
-        console.error('[Quick Dial] SDK initialization failed:', error);
+        addDebug(`[Quick Dial] ✗ SDK initialization failed: ${error.message}`);
         showStatus('⚠️ Cisco SDK not available - using fallback mode', 'warning');
         isSDKReady = false;
       }
@@ -2245,31 +2305,42 @@
     }
 
     async function dialContact(number, name) {
-      console.log('[Quick Dial] Dial requested:', { name, number, isSDKReady });
+      addDebug(`[Quick Dial] Dial requested: ${name} - ${number}`);
+      addDebug(`[Quick Dial] SDK Ready: ${isSDKReady}`);
       
       if (!isSDKReady || !Desktop) {
-        console.warn('[Quick Dial] SDK not ready, showing fallback');
-        alert('Click-to-dial unavailable\n\nContact: ' + name + '\nNumber: ' + number + '\n\nPlease dial manually or contact IT to configure the Desktop SDK.');
+        alert('Click-to-dial unavailable\n\nContact: ' + name + '\nNumber: ' + number + '\n\nPlease dial manually.');
         return;
       }
 
       try {
-        console.log('[Quick Dial] Calling Desktop.dialer.startOutdial...');
+        addDebug('[Quick Dial] Attempting to dial via SDK...');
         
-        // Use the Webex Contact Center Desktop SDK
-        const result = await Desktop.dialer.startOutdial({
-          data: {
-            destination: number
-          }
-        });
-        
-        console.log('[Quick Dial] Call initiated successfully:', result);
-        showStatus(`📞 Calling ${name}...`, 'success');
-        setTimeout(() => hideStatus(), 5000);
+        // Try startOutdial method
+        if (Desktop.dialer && typeof Desktop.dialer.startOutdial === 'function') {
+          addDebug('[Quick Dial] Using Desktop.dialer.startOutdial()');
+          const result = await Desktop.dialer.startOutdial({
+            data: { destination: number }
+          });
+          addDebug(`[Quick Dial] ✓ Call initiated: ${JSON.stringify(result)}`);
+          showStatus(`📞 Calling ${name}...`, 'success');
+          setTimeout(() => hideStatus(), 5000);
+        }
+        // Try alternative method
+        else if (Desktop.dialer && typeof Desktop.dialer.dial === 'function') {
+          addDebug('[Quick Dial] Using Desktop.dialer.dial()');
+          const result = await Desktop.dialer.dial(number);
+          addDebug(`[Quick Dial] ✓ Call initiated: ${JSON.stringify(result)}`);
+          showStatus(`📞 Calling ${name}...`, 'success');
+          setTimeout(() => hideStatus(), 5000);
+        }
+        else {
+          throw new Error('No dial method found on Desktop.dialer');
+        }
         
       } catch (error) {
-        console.error('[Quick Dial] Error initiating call:', error);
-        alert('Call Failed\n\nContact: ' + name + '\nNumber: ' + number + '\n\nError: ' + error.message + '\n\nPlease dial manually.');
+        addDebug(`[Quick Dial] ✗ Dial failed: ${error.message}`);
+        alert('Call Failed\n\nContact: ' + name + '\nNumber: ' + number + '\n\nError: ' + error.message);
       }
     }
 
@@ -2299,32 +2370,13 @@
       }
     }
 
-    // Initialize on load
-    window.addEventListener('DOMContentLoaded', async () => {
-      console.log('[Quick Dial] Widget loaded - DOMContentLoaded');
-      renderContacts();
-      
-      // Try initializing SDK multiple times with increasing delays
-      const tryInit = async (attempt = 1) => {
-        console.log(`[Quick Dial] SDK init attempt ${attempt}/5`);
-        await initSDK();
-        
-        if (!isSDKReady && attempt < 5) {
-          setTimeout(() => tryInit(attempt + 1), attempt * 1000);
-        }
-      };
-      
-      // Start trying after a brief delay
-      setTimeout(() => tryInit(), 500);
-    });
-    
-    // Also try on window.load
-    window.addEventListener('load', async () => {
-      console.log('[Quick Dial] Window fully loaded');
-      if (!isSDKReady) {
-        setTimeout(async () => await initSDK(), 2000);
+    // Fallback if SDK doesn't load via CDN
+    setTimeout(() => {
+      if (!window.initializeAppCalled) {
+        addDebug('[Quick Dial] SDK load timeout - initializing without SDK');
+        window.initializeApp();
       }
-    });
+    }, 3000);
   </script>
 </body>
 </html>
