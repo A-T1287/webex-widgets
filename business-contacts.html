@@ -38,7 +38,2132 @@
   <div id="noResults" class="no-results hidden">No contacts found</div>
   <div class="speed-dial-container" id="contactsContainer"></div>
   <script>
-    const CONTACTS = [{"name": "Andrew Townsend", "number": "5736456752"}, {"name": "VU Connecticut CT Production", "number": "10012107"}, {"name": "Neighbors Bank Refinance All states", "number": "10014171"}, {"name": "Neighbors Bank All states", "number": "10014117"}, {"name": "Neighbors Bank High DTI Purchase", "number": "10015121"}, {"name": "Alliance Realty ARN", "number": "10012672"}, {"name": "Neighbors Bank Clarence MO Location", "number": "6606992343"}, {"name": "DCI", "number": "8772262351"}, {"name": "NB Post Closing", "number": "10014551"}, {"name": "NB_ClientAdv", "number": "10012355"}, {"name": "First Res_ClientAdv", "number": "10012356"}, {"name": "LoanCare VUHL", "number": "8005091319"}, {"name": "LoanCare First Residential", "number": "8889735798"}, {"name": "Payment Processing", "number": "10012602"}, {"name": "CSR_NB_ MyAcct_INT", "number": "10012671"}, {"name": "MyAccount Internal", "number": "10014002"}, {"name": "VU Alaska AK Refinance", "number": "10014308"}, {"name": "VU Alabama AL Refinance", "number": "10014309"}, {"name": "VU Arkansas AR Refinance", "number": "10014310"}, {"name": "VU Arizona AZ Refinance", "number": "10014311"}, {"name": "VU California CA Refinance", "number": "10014312"}, {"name": "VU Colorado CO Refinance", "number": "10014313"}, {"name": "VU Connecticut CT Refinance", "number": "10014314"}, {"name": "VU District of Columbia DC Refinance", "number": "10014315"}, {"name": "VU Delaware DE Refinance", "number": "10014316"}, {"name": "VU Florida FL Refinance", "number": "10014317"}, {"name": "VU Georgia GA Refinance", "number": "10014318"}, {"name": "VU Hawaii HI Refinance", "number": "10014319"}, {"name": "VU Idaho ID Refinance", "number": "10014321"}, {"name": "VU Illinois IL Refinance", "number": "10014322"}, {"name": "VU Iowa IA Refinance", "number": "10014320"}, {"name": "VU Virginia VA Refinance", "number": "10014353"}, {"name": "VU Texas TX Refinance", "number": "10014351"}, {"name": "VU Tennessee TN Refinance", "number": "10014350"}, {"name": "VU South Dakota SD Refinance", "number": "10014349"}, {"name": "VU South Carolina SC Refinance", "number": "10014348"}, {"name": "VU Rhode Island RI Refinance", "number": "10014347"}, {"name": "VU Pennsylvania PA Refinance", "number": "10014346"}, {"name": "VU Oregon OR Refinance", "number": "10014345"}, {"name": "VU Oklahoma OK Refinance", "number": "10014344"}, {"name": "VU Ohio OH Refinance", "number": "10014343"}, {"name": "VU New York NY Refinance", "number": "10014342"}, {"name": "VU Nevada NV Refinance", "number": "10014341"}, {"name": "VU New Mexico NM Refinance", "number": "10014340"}, {"name": "VU New Jersey NJ Refinance", "number": "10014339"}, {"name": "VU New Hampshire NH Refinance", "number": "10014338"}, {"name": "VU Nebraska NE Refinance", "number": "10014337"}, {"name": "VU North Dakota ND Refinance", "number": "10014336"}, {"name": "VU North Carolina NC Refinance", "number": "10014335"}, {"name": "VU Montana MT Refinance", "number": "10014334"}, {"name": "VU Mississippi MS Refinance", "number": "10014333"}, {"name": "VU Missouri MO Refinance", "number": "10014332"}, {"name": "VU Minnesota MN Refinance", "number": "10014331"}, {"name": "VU Michigan MI Refinance", "number": "10014330"}, {"name": "VU Indiana IN Refinance", "number": "10014323"}, {"name": "VU Kansas KS Refinance", "number": "10014324"}, {"name": "VU Kentucky KY Refinance", "number": "10014325"}, {"name": "VU Louisiana LA Refinance", "number": "10014326"}, {"name": "VU Massachusetts MA Refinance", "number": "10014327"}, {"name": "VU Maryland MD Refinance", "number": "10014328"}, {"name": "VU Maine ME Refinance", "number": "10014329"}, {"name": "VU Utah UT Refinance", "number": "10014352"}, {"name": "VU Wisconsin WI Refinance", "number": "10014358"}, {"name": "VU Wyoming WY Refinance", "number": "10014357"}, {"name": "VU West Virginia WV Refinance", "number": "10014356"}, {"name": "VU Washington WA Refinance", "number": "10014355"}, {"name": "VU Vermont VT Refinance", "number": "10014354"}, {"name": "Mr Cooper VU Employee Only", "number": "10000087"}, {"name": "CSR Intern_Desk", "number": "10012685"}, {"name": "First_Res_Payment_Processing", "number": "10012687"}, {"name": "NB Payment Processing", "number": "10012686"}, {"name": "Equifax", "number": "8667463780"}, {"name": "Veterans United Insurance VUI", "number": "10012651"}, {"name": "Veterans United Realty VUR", "number": "10012627"}, {"name": "VUHL Client Advocate", "number": "10012601"}, {"name": "VUHL Payment Team", "number": "10012614"}, {"name": "VUHL Branch MO Lake of the Ozarks", "number": "3530"}, {"name": "Specialty LO Leadership", "number": "10000032"}, {"name": "VUI Alaska AK", "number": "10001016"}, {"name": "VUI Alabama AL", "number": "10001017"}, {"name": "VUI Arkansas AR", "number": "10001018"}, {"name": "VUI Arizona AZ", "number": "10001019"}, {"name": "VUI Colorado CO", "number": "10001020"}, {"name": "VUI Connecticut CT", "number": "10001021"}, {"name": "VUI District of Columbia DC", "number": "10001022"}, {"name": "VUI Delaware DE", "number": "10001023"}, {"name": "VUI Florida FL", "number": "10001024"}, {"name": "VUI Georgia GA", "number": "10001025"}, {"name": "VUI Hawaii HI", "number": "10001026"}, {"name": "VUI Iowa IA", "number": "10001027"}, {"name": "VUI Idaho ID", "number": "10001028"}, {"name": "VUI Illinois IL", "number": "10001029"}, {"name": "VUI Indiana IN", "number": "10001030"}, {"name": "VUI Kansas KS", "number": "10001031"}, {"name": "VUI Kentucky KY", "number": "10001032"}, {"name": "VUI Louisiana LA", "number": "10001033"}, {"name": "VUI Maryland MD", "number": "10001034"}, {"name": "VUI Maine ME", "number": "10001035"}, {"name": "VUI Michigan MI", "number": "10001036"}, {"name": "VUI Minnesota MN", "number": "10001037"}, {"name": "VUI Missouri MO", "number": "10001038"}, {"name": "VUI Mississippi MS", "number": "10001039"}, {"name": "VUI Montana MT", "number": "10001040"}, {"name": "VUI North Carolina NC", "number": "10001041"}, {"name": "VUI North Dakota ND", "number": "10001042"}, {"name": "VUI Nebraska NE", "number": "10001043"}, {"name": "VUI New Hampshire NH", "number": "10001044"}, {"name": "VUI New Jersey NJ", "number": "10001045"}, {"name": "VUI New Mexico NM", "number": "10001046"}, {"name": "VUI Nevada NV", "number": "10001047"}, {"name": "VUI New York NY", "number": "10001048"}, {"name": "VUI Ohio OH", "number": "10001049"}, {"name": "VUI Oklahoma OK", "number": "10001050"}, {"name": "VUI Oregon OR", "number": "10001051"}, {"name": "VUI Pennsylvania PA", "number": "10001052"}, {"name": "VUI Rhode Island RI", "number": "10001053"}, {"name": "VUI South Carolina SC", "number": "10001054"}, {"name": "VUI South Dakota SD", "number": "10001055"}, {"name": "VUI Tennessee TN", "number": "10001056"}, {"name": "VUI Texas TX", "number": "10001057"}, {"name": "VUI Utah UT", "number": "10001058"}, {"name": "VUI Virginia VA", "number": "10001059"}, {"name": "VUI Vermont VT", "number": "10001060"}, {"name": "VUI Washington WA", "number": "10001061"}, {"name": "VUI West Virginia WV", "number": "10001062"}, {"name": "VUI Wisconsin WI", "number": "10001063"}, {"name": "VUI Wyoming WY", "number": "10001064"}, {"name": "Refi.com Arizona AZ Refinance", "number": "10012703"}, {"name": "Refi.com California CA Refinance", "number": "10012704"}, {"name": "Refi.com Alaska AK Refinance", "number": "10012700"}, {"name": "Refi.com Alabama AL Refinance", "number": "10012701"}, {"name": "Refi.com Arkansas AR Refinance", "number": "10012702"}, {"name": "Refi.com Colorado CO Refinance", "number": "10012705"}, {"name": "Refi.com Connecticut CT Refinance", "number": "10012706"}, {"name": "Refi.com District of Columbia DC Refinance", "number": "10012707"}, {"name": "Refi.com Delaware DE Refinance", "number": "10012708"}, {"name": "Refi.com Florida FL Refinance", "number": "10012709"}, {"name": "Refi.com Georgia GA Refinance", "number": "10012710"}, {"name": "Refi.com Hawaii HI Refinance", "number": "10012711"}, {"name": "Refi.com Iowa IA Refinance", "number": "10012712"}, {"name": "Refi.com Idaho ID Refinance", "number": "10012713"}, {"name": "Refi.com Illinois IL Refinance", "number": "10012714"}, {"name": "Refi.com Indiana IN Refinance", "number": "10012715"}, {"name": "Refi.com Kansas KS Refinance", "number": "10012716"}, {"name": "Refi.com Kentucky KY Refinance", "number": "10012717"}, {"name": "Refi.com Louisiana LA Refinance", "number": "10012718"}, {"name": "Refi.com Massachusetts MA Refinance", "number": "10012719"}, {"name": "Refi.com Maryland MD Refinance", "number": "10012720"}, {"name": "Refi.com Maine ME Refinance", "number": "10012721"}, {"name": "Refi.com Michigan MI Refinance", "number": "10012722"}, {"name": "Refi.com Minnesota MN Refinance", "number": "10012723"}, {"name": "Refi.com Missouri MO Refinance", "number": "10012724"}, {"name": "Refi.com Mississippi MS Refinance", "number": "10012725"}, {"name": "Refi.com Montana MT Refinance", "number": "10012726"}, {"name": "Refi.com North Carolina NC Refinance", "number": "10012727"}, {"name": "Refi.com North Dakota ND Refinance", "number": "10012728"}, {"name": "Refi.com Nebraska NE Refinance", "number": "10012729"}, {"name": "Refi.com New Hampshire NH Refinance", "number": "10012730"}, {"name": "Refi.com New Jersey NJ Refinance", "number": "10012731"}, {"name": "Refi.com New Mexico NM Refinance", "number": "10012732"}, {"name": "Refi.com Nevada NV Refinance", "number": "10012733"}, {"name": "Refi.com New York NY Refinance", "number": "10012734"}, {"name": "Refi.com Ohio OH Refinance", "number": "10012735"}, {"name": "Refi.com Oklahoma OK Refinance", "number": "10012736"}, {"name": "Refi.com Oregon OR Refinance", "number": "10012737"}, {"name": "Refi.com Pennsylvania PA Refinance", "number": "10012738"}, {"name": "Refi.com Rhode Island RI Refinance", "number": "10012739"}, {"name": "Refi.com South Carolina SC Refinance", "number": "10012740"}, {"name": "Refi.com South Dakota SD Refinance", "number": "10012741"}, {"name": "Refi.com Tennessee TN Refinance", "number": "10012742"}, {"name": "Refi.com Texas TX Refinance", "number": "10012743"}, {"name": "Refi.com Utah UT Refinance", "number": "10012744"}, {"name": "Refi.com Virginia VA Refinance", "number": "10012745"}, {"name": "Refi.com Vermont VT Refinance", "number": "10012746"}, {"name": "Refi.com Washington WA Refinance", "number": "10012747"}, {"name": "Refi.com Wisconsin WI Refinance", "number": "10012748"}, {"name": "Refi.com West Virginia WV Refinance", "number": "10012749"}, {"name": "Refi.com Wyoming WY Refinance", "number": "10012750"}, {"name": "First Res Alaska AK Production", "number": "10013200"}, {"name": "First Res Alabama AL Production", "number": "10013201"}, {"name": "First Res Arkansas AR Production", "number": "10013202"}, {"name": "First Res Arizona AZ Production", "number": "10013203"}, {"name": "First Res California CA Production", "number": "10013204"}, {"name": "First Res Colorado CO Production", "number": "10013205"}, {"name": "First Res Connecticut CT Production", "number": "10013206"}, {"name": "First Res District of Columbia DC Production", "number": "10013207"}, {"name": "First Res Delaware DE Production", "number": "10013208"}, {"name": "First Res Florida FL Production", "number": "10013209"}, {"name": "First Res Georgia GA Production", "number": "10013210"}, {"name": "First Res Hawaii HI Production", "number": "10013211"}, {"name": "First Res Iowa IA Production", "number": "10013212"}, {"name": "First Res Idaho ID Production", "number": "10013213"}, {"name": "First Res Illinois IL Production", "number": "10013214"}, {"name": "First Res Indiana IN Production", "number": "10013215"}, {"name": "First Res Kansas KS Production", "number": "10013216"}, {"name": "First Res Kentucky KY Production", "number": "10013217"}, {"name": "First Res Louisiana LA Production", "number": "10013218"}, {"name": "First Res Massachusetts MA Production", "number": "10013219"}, {"name": "First Res Maryland MD Production", "number": "10013220"}, {"name": "First Res Maine ME Production", "number": "10013221"}, {"name": "First Res Michigan MI Production", "number": "10013222"}, {"name": "First Res Minnesota MN Production", "number": "10013223"}, {"name": "First Res Missouri MO Production", "number": "10013224"}, {"name": "First Res Mississippi MS Production", "number": "10013225"}, {"name": "First Res Montana MT Production", "number": "10013226"}, {"name": "First Res North Carolina NC Production", "number": "10013227"}, {"name": "First Res North Dakota ND Production", "number": "10013228"}, {"name": "First Res Nebraska NE Production", "number": "10013229"}, {"name": "First Res New Hampshire NH Production", "number": "10013230"}, {"name": "First Res New Jersey NJ Production", "number": "10013231"}, {"name": "First Res New Mexico NM Production", "number": "10013232"}, {"name": "First Res Nevada NV Production", "number": "10013233"}, {"name": "First Res New York NY Production", "number": "10013234"}, {"name": "First Res Ohio OH Production", "number": "10013235"}, {"name": "First Res Oklahoma OK Production", "number": "10013236"}, {"name": "First Res Oregon OR Production", "number": "10013237"}, {"name": "First Res Pennsylvania PA Production", "number": "10013238"}, {"name": "First Res Rhode Island RI Production", "number": "10013239"}, {"name": "First Res South Carolina SC Production", "number": "10013240"}, {"name": "First Res South Dakota SD Production", "number": "10013241"}, {"name": "First Res Tennessee TN Production", "number": "10013242"}, {"name": "First Res Texas TX Production", "number": "10013243"}, {"name": "First Res Utah UT Production", "number": "10013244"}, {"name": "First Res Virginia VA Production", "number": "10013245"}, {"name": "First Res Vermont VT Production", "number": "10013246"}, {"name": "First Res Washington WA Production", "number": "10013247"}, {"name": "First Res Wisconsin WI Production", "number": "10013248"}, {"name": "First Res West Virginia WV Production", "number": "10013249"}, {"name": "First Res Wyoming WY Production", "number": "10013250"}, {"name": "AK IRRRL Mailer", "number": "10000102"}, {"name": "AL IRRRL Mailer", "number": "10000103"}, {"name": "AR IRRRL Mailer", "number": "10000104"}, {"name": "AZ IRRRL Mailer", "number": "10000105"}, {"name": "CA IRRRL Mailer", "number": "10000106"}, {"name": "CO IRRRL Mailer", "number": "10000107"}, {"name": "CT IRRRL Mailer", "number": "10000108"}, {"name": "DE IRRRL Mailer", "number": "10000109"}, {"name": "DC IRRRL Mailer", "number": "10000110"}, {"name": "FL IRRRL Mailer", "number": "10000111"}, {"name": "GA IRRRL Mailer", "number": "10000112"}, {"name": "HI IRRRL Mailer", "number": "10000113"}, {"name": "ID IRRRL Mailer", "number": "10000114"}, {"name": "IL IRRRL Mailer", "number": "10000115"}, {"name": "IN IRRRL Mailer", "number": "10000116"}, {"name": "IA IRRRL Mailer", "number": "10000117"}, {"name": "KS IRRRL Mailer", "number": "10000118"}, {"name": "KY IRRRL Mailer", "number": "10000119"}, {"name": "LA IRRRL Mailer", "number": "10000120"}, {"name": "ME IRRRL Mailer", "number": "10000121"}, {"name": "MD IRRRL Mailer", "number": "10000122"}, {"name": "MA IRRRL Mailer", "number": "10000123"}, {"name": "MI IRRRL Mailer", "number": "10000124"}, {"name": "MN IRRRL Mailer", "number": "10000125"}, {"name": "MS IRRRL Mailer", "number": "10000126"}, {"name": "MO IRRRL Mailer", "number": "10000127"}, {"name": "MT IRRRL Mailer", "number": "10000128"}, {"name": "NE IRRRL Mailer", "number": "10000129"}, {"name": "NV IRRRL Mailer", "number": "10000130"}, {"name": "NH IRRRL Mailer", "number": "10000131"}, {"name": "NJ IRRRL Mailer", "number": "10000132"}, {"name": "NM IRRRL Mailer", "number": "10000133"}, {"name": "NY IRRRL Mailer", "number": "10000134"}, {"name": "NC IRRRL Mailer", "number": "10000135"}, {"name": "ND IRRRL Mailer", "number": "10000136"}, {"name": "OH IRRRL Mailer", "number": "10000137"}, {"name": "OK IRRRL Mailer", "number": "10000138"}, {"name": "OR IRRRL Mailer", "number": "10000139"}, {"name": "PA IRRRL Mailer", "number": "10000140"}, {"name": "RI IRRRL Mailer", "number": "10000141"}, {"name": "SC IRRRL Mailer", "number": "10000142"}, {"name": "SD IRRRL Mailer", "number": "10000143"}, {"name": "TN IRRRL Mailer", "number": "10000144"}, {"name": "TX IRRRL Mailer", "number": "10000145"}, {"name": "UT IRRRL Mailer", "number": "10000146"}, {"name": "VT IRRRL Mailer", "number": "10000147"}, {"name": "VA IRRRL Mailer", "number": "10000148"}, {"name": "WA IRRRL Mailer", "number": "10000149"}, {"name": "WV IRRRL Mailer", "number": "10000150"}, {"name": "WI IRRRL Mailer", "number": "10000151"}, {"name": "WY IRRRL Mailer", "number": "10000152"}];
+    const CONTACTS = [
+{
+"name": "#NAME?",
+"number": "10012153"
+},
+{
+"name": "AK IRRRL Mailer",
+"number": "10000102"
+},
+{
+"name": "AL IRRRL Mailer",
+"number": "10000103"
+},
+{
+"name": "Andrew Townsend",
+"number": "5736456752"
+},
+{
+"name": "AR IRRRL Mailer",
+"number": "10000104"
+},
+{
+"name": "ARN-ARN",
+"number": "10012672"
+},
+{
+"name": "AZ IRRRL Mailer",
+"number": "10000105"
+},
+{
+"name": "Branch_Augusta GA",
+"number": "10012506"
+},
+{
+"name": "Branch_Austin TX",
+"number": "10012529"
+},
+{
+"name": "Branch_Bellevue NE",
+"number": "10012519"
+},
+{
+"name": "Branch_Clarksville TN",
+"number": "10012523"
+},
+{
+"name": "Branch_Colorado_Springs CO",
+"number": "10012504"
+},
+{
+"name": "Branch_Elizabethtown KY",
+"number": "10012512"
+},
+{
+"name": "Branch_Enterprise AL",
+"number": "10012502"
+},
+{
+"name": "Branch_Fayetteville NC",
+"number": "10012517"
+},
+{
+"name": "Branch_Hinesville GA",
+"number": "10012530"
+},
+{
+"name": "Branch_Jacksonville NC",
+"number": "10012518"
+},
+{
+"name": "Branch_Killeen TX",
+"number": "10012524"
+},
+{
+"name": "Branch_Lawton OK",
+"number": "10012520"
+},
+{
+"name": "Branch_Lighthouse MO",
+"number": "10012514"
+},
+{
+"name": "Branch_Mountain_Home ID",
+"number": "10012509"
+},
+{
+"name": "Branch_Piedmont SC",
+"number": "10012521"
+},
+{
+"name": "Branch_Puyallup WA",
+"number": "10012528"
+},
+{
+"name": "Branch_Richmond VA",
+"number": "10012526"
+},
+{
+"name": "Branch_San_Antonio TX",
+"number": "10012525"
+},
+{
+"name": "Branch_San_Diego CA",
+"number": "10012503"
+},
+{
+"name": "Branch_Savannah GA",
+"number": "10012507"
+},
+{
+"name": "Branch_Scott_AFB IL",
+"number": "10012511"
+},
+{
+"name": "Branch_Tampa FL",
+"number": "10012505"
+},
+{
+"name": "Branch_Virginia_Beach VA",
+"number": "10012527"
+},
+{
+"name": "Branch_Waipio HI",
+"number": "10012508"
+},
+{
+"name": "CA IRRRL Mailer",
+"number": "10000106"
+},
+{
+"name": "Cenlar-Cenlar",
+"number": "10000090"
+},
+{
+"name": "CO IRRRL Mailer",
+"number": "10000107"
+},
+{
+"name": "Concierge Desk Corp-Concierge Desk Corp",
+"number": "10012609"
+},
+{
+"name": "Corp-CSR_MyVU",
+"number": "10012622"
+},
+{
+"name": "Corp-CSR_Pmts Internal",
+"number": "10012614"
+},
+{
+"name": "Corp-CSR_Pmts LoanQ",
+"number": "10012613"
+},
+{
+"name": "Corp-CSR_Spanish",
+"number": "10012656"
+},
+{
+"name": "Corp-CSR_SR1",
+"number": "10012615"
+},
+{
+"name": "Corp-CSR_Team Leads",
+"number": "10012617"
+},
+{
+"name": "CSR Intern_Desk",
+"number": "10012685"
+},
+{
+"name": "CSR_NB_ MyAcct_INT",
+"number": "10012671"
+},
+{
+"name": "CT IRRRL Mailer",
+"number": "10000108"
+},
+{
+"name": "DC IRRRL Mailer",
+"number": "10000110"
+},
+{
+"name": "DCI",
+"number": "8772262351"
+},
+{
+"name": "DE IRRRL Mailer",
+"number": "10000109"
+},
+{
+"name": "Equifax",
+"number": "8667463780"
+},
+{
+"name": "First Res Alabama AL Production",
+"number": "10013201"
+},
+{
+"name": "First Res Alaska AK Production",
+"number": "10013200"
+},
+{
+"name": "First Res Arizona AZ Production",
+"number": "10013203"
+},
+{
+"name": "First Res Arkansas AR Production",
+"number": "10013202"
+},
+{
+"name": "First Res California CA Production",
+"number": "10013204"
+},
+{
+"name": "First Res Colorado CO Production",
+"number": "10013205"
+},
+{
+"name": "First Res Connecticut CT Production",
+"number": "10013206"
+},
+{
+"name": "First Res Delaware DE Production",
+"number": "10013208"
+},
+{
+"name": "First Res District of Columbia DC Production",
+"number": "10013207"
+},
+{
+"name": "First Res Florida FL Production",
+"number": "10013209"
+},
+{
+"name": "First Res Georgia GA Production",
+"number": "10013210"
+},
+{
+"name": "First Res Hawaii HI Production",
+"number": "10013211"
+},
+{
+"name": "First Res Idaho ID Production",
+"number": "10013213"
+},
+{
+"name": "First Res Illinois IL Production",
+"number": "10013214"
+},
+{
+"name": "First Res Indiana IN Production",
+"number": "10013215"
+},
+{
+"name": "First Res Iowa IA Production",
+"number": "10013212"
+},
+{
+"name": "First Res Kansas KS Production",
+"number": "10013216"
+},
+{
+"name": "First Res Kentucky KY Production",
+"number": "10013217"
+},
+{
+"name": "First Res Louisiana LA Production",
+"number": "10013218"
+},
+{
+"name": "First Res Maine ME Production",
+"number": "10013221"
+},
+{
+"name": "First Res Maryland MD Production",
+"number": "10013220"
+},
+{
+"name": "First Res Massachusetts MA Production",
+"number": "10013219"
+},
+{
+"name": "First Res Michigan MI Production",
+"number": "10013222"
+},
+{
+"name": "First Res Minnesota MN Production",
+"number": "10013223"
+},
+{
+"name": "First Res Mississippi MS Production",
+"number": "10013225"
+},
+{
+"name": "First Res Missouri MO Production",
+"number": "10013224"
+},
+{
+"name": "First Res Montana MT Production",
+"number": "10013226"
+},
+{
+"name": "First Res Nebraska NE Production",
+"number": "10013229"
+},
+{
+"name": "First Res Nevada NV Production",
+"number": "10013233"
+},
+{
+"name": "First Res New Hampshire NH Production",
+"number": "10013230"
+},
+{
+"name": "First Res New Jersey NJ Production",
+"number": "10013231"
+},
+{
+"name": "First Res New Mexico NM Production",
+"number": "10013232"
+},
+{
+"name": "First Res New York NY Production",
+"number": "10013234"
+},
+{
+"name": "First Res North Carolina NC Production",
+"number": "10013227"
+},
+{
+"name": "First Res North Dakota ND Production",
+"number": "10013228"
+},
+{
+"name": "First Res Ohio OH Production",
+"number": "10013235"
+},
+{
+"name": "First Res Oklahoma OK Production",
+"number": "10013236"
+},
+{
+"name": "First Res Oregon OR Production",
+"number": "10013237"
+},
+{
+"name": "First Res Pennsylvania PA Production",
+"number": "10013238"
+},
+{
+"name": "First Res Rhode Island RI Production",
+"number": "10013239"
+},
+{
+"name": "First Res Servicing Help Int Corp-First Res Servicing Help Int Corp",
+"number": "10013058"
+},
+{
+"name": "First Res South Carolina SC Production",
+"number": "10013240"
+},
+{
+"name": "First Res South Dakota SD Production",
+"number": "10013241"
+},
+{
+"name": "First Res Tennessee TN Production",
+"number": "10013242"
+},
+{
+"name": "First Res Texas TX Production",
+"number": "10013243"
+},
+{
+"name": "First Res Utah UT Production",
+"number": "10013244"
+},
+{
+"name": "First Res Vermont VT Production",
+"number": "10013246"
+},
+{
+"name": "First Res Virginia VA Production",
+"number": "10013245"
+},
+{
+"name": "First Res Washington WA Production",
+"number": "10013247"
+},
+{
+"name": "First Res West Virginia WV Production",
+"number": "10013249"
+},
+{
+"name": "First Res Wisconsin WI Production",
+"number": "10013248"
+},
+{
+"name": "First Res Wyoming WY Production",
+"number": "10013250"
+},
+{
+"name": "First Res-Mr. Cooper",
+"number": "8339812054"
+},
+{
+"name": "First Res_ClientAdv",
+"number": "10012356"
+},
+{
+"name": "First_Res_Payment_Processing",
+"number": "10012687"
+},
+{
+"name": "FL IRRRL Mailer",
+"number": "10000111"
+},
+{
+"name": "GA IRRRL Mailer",
+"number": "10000112"
+},
+{
+"name": "HI IRRRL Mailer",
+"number": "10000113"
+},
+{
+"name": "IA IRRRL Mailer",
+"number": "10000117"
+},
+{
+"name": "ID IRRRL Mailer",
+"number": "10000114"
+},
+{
+"name": "IL IRRRL Mailer",
+"number": "10000115"
+},
+{
+"name": "IN IRRRL Mailer",
+"number": "10000116"
+},
+{
+"name": "Insurance-PIA_Trans",
+"number": "10012621"
+},
+{
+"name": "IT Help Desk Corp-IT Help Desk Corp",
+"number": "10012619"
+},
+{
+"name": "KS IRRRL Mailer",
+"number": "10000118"
+},
+{
+"name": "KY IRRRL Mailer",
+"number": "10000119"
+},
+{
+"name": "LA IRRRL Mailer",
+"number": "10000120"
+},
+{
+"name": "Legal Client Relations Managers",
+"number": "10000030"
+},
+{
+"name": "Lighthouse Complaints-Lighthouse Complaints",
+"number": "10012654"
+},
+{
+"name": "LoanCare First Residential",
+"number": "8889735798"
+},
+{
+"name": "LoanCare VUHL",
+"number": "8005091319"
+},
+{
+"name": "MA IRRRL Mailer",
+"number": "10000123"
+},
+{
+"name": "MD IRRRL Mailer",
+"number": "10000122"
+},
+{
+"name": "ME IRRRL Mailer",
+"number": "10000121"
+},
+{
+"name": "MI IRRRL Mailer",
+"number": "10000124"
+},
+{
+"name": "MN IRRRL Mailer",
+"number": "10000125"
+},
+{
+"name": "MO IRRRL Mailer",
+"number": "10000127"
+},
+{
+"name": "Mr. Cooper VU Employee Only",
+"number": "10000087"
+},
+{
+"name": "MS IRRRL Mailer",
+"number": "10000126"
+},
+{
+"name": "MT IRRRL Mailer",
+"number": "10000128"
+},
+{
+"name": "MyAccount Internal",
+"number": "10014002"
+},
+{
+"name": "NB Payment Processing",
+"number": "10012686"
+},
+{
+"name": "NB Post Closing",
+"number": "10014551"
+},
+{
+"name": "NB Servicing Help Int Corp-NB Servicing Help Int Corp",
+"number": "10013059"
+},
+{
+"name": "NB_ClientAdv",
+"number": "10012355"
+},
+{
+"name": "NC IRRRL Mailer",
+"number": "10000135"
+},
+{
+"name": "ND IRRRL Mailer",
+"number": "10000136"
+},
+{
+"name": "NE IRRRL Mailer",
+"number": "10000129"
+},
+{
+"name": "Neighbors Bank All states",
+"number": "10014117"
+},
+{
+"name": "Neighbors Bank Clarence MO Location",
+"number": "6606992343"
+},
+{
+"name": "Neighbors Bank High DTI Purchase",
+"number": "10015121"
+},
+{
+"name": "Neighbors Bank Refinance All states",
+"number": "10014171"
+},
+{
+"name": "NH IRRRL Mailer",
+"number": "10000131"
+},
+{
+"name": "NJ IRRRL Mailer",
+"number": "10000132"
+},
+{
+"name": "NM IRRRL Mailer",
+"number": "10000133"
+},
+{
+"name": "NV IRRRL Mailer",
+"number": "10000130"
+},
+{
+"name": "NY IRRRL Mailer",
+"number": "10000134"
+},
+{
+"name": "OH IRRRL Mailer",
+"number": "10000137"
+},
+{
+"name": "OK IRRRL Mailer",
+"number": "10000138"
+},
+{
+"name": "OR IRRRL Mailer",
+"number": "10000139"
+},
+{
+"name": "PA IRRRL Mailer",
+"number": "10000140"
+},
+{
+"name": "Payment Processing",
+"number": "10012602"
+},
+{
+"name": "PIA Anniversary Insurance-PIA Anniversary Insurance",
+"number": "10013056"
+},
+{
+"name": "PIA Customer Service Insuranc-PIA Customer Service Insuranc",
+"number": "10013055"
+},
+{
+"name": "PIA Sales Insurance-PIA Sales Insurance",
+"number": "10013054"
+},
+{
+"name": "Platinum Desk Transfer-Platimum Desk",
+"number": "10012657"
+},
+{
+"name": "Refi.com Alabama AL Refinance",
+"number": "10012701"
+},
+{
+"name": "Refi.com Alaska AK Refinance",
+"number": "10012700"
+},
+{
+"name": "Refi.com Arizona AZ Refinance",
+"number": "10012703"
+},
+{
+"name": "Refi.com Arkansas AR Refinance",
+"number": "10012702"
+},
+{
+"name": "Refi.com California CA Refinance",
+"number": "10012704"
+},
+{
+"name": "Refi.com Colorado CO Refinance",
+"number": "10012705"
+},
+{
+"name": "Refi.com Connecticut CT Refinance",
+"number": "10012706"
+},
+{
+"name": "Refi.com Delaware DE Refinance",
+"number": "10012708"
+},
+{
+"name": "Refi.com District of Columbia DC Refinance",
+"number": "10012707"
+},
+{
+"name": "Refi.com Florida FL Refinance",
+"number": "10012709"
+},
+{
+"name": "Refi.com Georgia GA Refinance",
+"number": "10012710"
+},
+{
+"name": "Refi.com Hawaii HI Refinance",
+"number": "10012711"
+},
+{
+"name": "Refi.com Idaho ID Refinance",
+"number": "10012713"
+},
+{
+"name": "Refi.com Illinois IL Refinance",
+"number": "10012714"
+},
+{
+"name": "Refi.com Indiana IN Refinance",
+"number": "10012715"
+},
+{
+"name": "Refi.com Iowa IA Refinance",
+"number": "10012712"
+},
+{
+"name": "Refi.com Kansas KS Refinance",
+"number": "10012716"
+},
+{
+"name": "Refi.com Kentucky KY Refinance",
+"number": "10012717"
+},
+{
+"name": "Refi.com Louisiana LA Refinance",
+"number": "10012718"
+},
+{
+"name": "Refi.com Maine ME Refinance",
+"number": "10012721"
+},
+{
+"name": "Refi.com Maryland MD Refinance",
+"number": "10012720"
+},
+{
+"name": "Refi.com Massachusetts MA Refinance",
+"number": "10012719"
+},
+{
+"name": "Refi.com Michigan MI Refinance",
+"number": "10012722"
+},
+{
+"name": "Refi.com Minnesota MN Refinance",
+"number": "10012723"
+},
+{
+"name": "Refi.com Mississippi MS Refinance",
+"number": "10012725"
+},
+{
+"name": "Refi.com Missouri MO Refinance",
+"number": "10012724"
+},
+{
+"name": "Refi.com Montana MT Refinance",
+"number": "10012726"
+},
+{
+"name": "Refi.com Nebraska NE Refinance",
+"number": "10012729"
+},
+{
+"name": "Refi.com Nevada NV Refinance",
+"number": "10012733"
+},
+{
+"name": "Refi.com New Hampshire NH Refinance",
+"number": "10012730"
+},
+{
+"name": "Refi.com New Jersey NJ Refinance",
+"number": "10012731"
+},
+{
+"name": "Refi.com New Mexico NM Refinance",
+"number": "10012732"
+},
+{
+"name": "Refi.com New York NY Refinance",
+"number": "10012734"
+},
+{
+"name": "Refi.com North Carolina NC Refinance",
+"number": "10012727"
+},
+{
+"name": "Refi.com North Dakota ND Refinance",
+"number": "10012728"
+},
+{
+"name": "Refi.com Ohio OH Refinance",
+"number": "10012735"
+},
+{
+"name": "Refi.com Oklahoma OK Refinance",
+"number": "10012736"
+},
+{
+"name": "Refi.com Oregon OR Refinance",
+"number": "10012737"
+},
+{
+"name": "Refi.com Pennsylvania PA Refinance",
+"number": "10012738"
+},
+{
+"name": "Refi.com Rhode Island RI Refinance",
+"number": "10012739"
+},
+{
+"name": "Refi.com South Carolina SC Refinance",
+"number": "10012740"
+},
+{
+"name": "Refi.com South Dakota SD Refinance",
+"number": "10012741"
+},
+{
+"name": "Refi.com Tennessee TN Refinance",
+"number": "10012742"
+},
+{
+"name": "Refi.com Texas TX Refinance",
+"number": "10012743"
+},
+{
+"name": "Refi.com Utah UT Refinance",
+"number": "10012744"
+},
+{
+"name": "Refi.com Vermont VT Refinance",
+"number": "10012746"
+},
+{
+"name": "Refi.com Virginia VA Refinance",
+"number": "10012745"
+},
+{
+"name": "Refi.com Washington WA Refinance",
+"number": "10012747"
+},
+{
+"name": "Refi.com West Virginia WV Refinance",
+"number": "10012749"
+},
+{
+"name": "Refi.com Wisconsin WI Refinance",
+"number": "10012748"
+},
+{
+"name": "Refi.com Wyoming WY Refinance",
+"number": "10012750"
+},
+{
+"name": "RI IRRRL Mailer",
+"number": "10000141"
+},
+{
+"name": "SC IRRRL Mailer",
+"number": "10000142"
+},
+{
+"name": "SD IRRRL Mailer",
+"number": "10000143"
+},
+{
+"name": "Specialty LO Leadership",
+"number": "10000032"
+},
+{
+"name": "Srv Corp-Client Adv",
+"number": "10012676"
+},
+{
+"name": "TN IRRRL Mailer",
+"number": "10000144"
+},
+{
+"name": "Transfer To New LO Trainers-New LO Trainers",
+"number": "10012658"
+},
+{
+"name": "TX IRRRL Mailer",
+"number": "10000145"
+},
+{
+"name": "UT IRRRL Mailer",
+"number": "10000146"
+},
+{
+"name": "VA IRRRL Mailer",
+"number": "10000148"
+},
+{
+"name": "Veteran Crisis Line-Veteran Crisis Line",
+"number": "8002738255"
+},
+{
+"name": "Veterans United Insurance VUI",
+"number": "10012651"
+},
+{
+"name": "Veterans United Realty VUR",
+"number": "10012627"
+},
+{
+"name": "VT IRRRL Mailer",
+"number": "10000147"
+},
+{
+"name": "VU Alabama AL LSTier2",
+"number": "10014058"
+},
+{
+"name": "VU Alabama AL Overflow",
+"number": "10012202"
+},
+{
+"name": "VU Alabama AL Poor Credit",
+"number": "10012302"
+},
+{
+"name": "VU Alabama AL Production",
+"number": "10012102"
+},
+{
+"name": "VU Alabama AL Refinance",
+"number": "10014309"
+},
+{
+"name": "VU Alaska AK LSTier2",
+"number": "10014057"
+},
+{
+"name": "VU Alaska AK Overflow",
+"number": "10012201"
+},
+{
+"name": "VU Alaska AK Poor Credit",
+"number": "10012301"
+},
+{
+"name": "VU Alaska AK Production",
+"number": "10012101"
+},
+{
+"name": "VU Alaska AK Refinance",
+"number": "10014308"
+},
+{
+"name": "VU Arizona AZ LSTier2",
+"number": "10014060"
+},
+{
+"name": "VU Arizona AZ Overflow",
+"number": "10012204"
+},
+{
+"name": "VU Arizona AZ Poor Credit",
+"number": "10012304"
+},
+{
+"name": "VU Arizona AZ Production",
+"number": "10012104"
+},
+{
+"name": "VU Arizona AZ Refinance",
+"number": "10014311"
+},
+{
+"name": "VU Arkansas AR LSTier2",
+"number": "10014059"
+},
+{
+"name": "VU Arkansas AR Overflow",
+"number": "10012203"
+},
+{
+"name": "VU Arkansas AR Poor Credit",
+"number": "10012303"
+},
+{
+"name": "VU Arkansas AR Production",
+"number": "10012103"
+},
+{
+"name": "VU Arkansas AR Refinance",
+"number": "10014310"
+},
+{
+"name": "VU California CA LSTier2",
+"number": "10014061"
+},
+{
+"name": "VU California CA Overflow",
+"number": "10012205"
+},
+{
+"name": "VU California CA Poor Credit",
+"number": "10012305"
+},
+{
+"name": "VU California CA Production",
+"number": "10012105"
+},
+{
+"name": "VU California CA Refinance",
+"number": "10014312"
+},
+{
+"name": "VU Colorado CO LSTier2",
+"number": "10014062"
+},
+{
+"name": "VU Colorado CO Overflow",
+"number": "10012206"
+},
+{
+"name": "VU Colorado CO Poor Credit",
+"number": "10012306"
+},
+{
+"name": "VU Colorado CO Production",
+"number": "10012106"
+},
+{
+"name": "VU Colorado CO Refinance",
+"number": "10014313"
+},
+{
+"name": "VU Connecticut CT LSTier2",
+"number": "10014063"
+},
+{
+"name": "VU Connecticut CT Overflow",
+"number": "10012207"
+},
+{
+"name": "VU Connecticut CT Poor Credit",
+"number": "10012307"
+},
+{
+"name": "VU Connecticut CT Production",
+"number": "10012107"
+},
+{
+"name": "VU Connecticut CT Refinance",
+"number": "10014314"
+},
+{
+"name": "VU Delaware DE LSTier2",
+"number": "10014065"
+},
+{
+"name": "VU Delaware DE Overflow",
+"number": "10012209"
+},
+{
+"name": "VU Delaware DE Poor Credit",
+"number": "10012309"
+},
+{
+"name": "VU Delaware DE Production",
+"number": "10012109"
+},
+{
+"name": "VU Delaware DE Refinance",
+"number": "10014316"
+},
+{
+"name": "VU District of Columbia DC LSTier2",
+"number": "10014064"
+},
+{
+"name": "VU District of Columbia DC Overflow",
+"number": "10012208"
+},
+{
+"name": "VU District of Columbia DC Poor Credit",
+"number": "10012308"
+},
+{
+"name": "VU District of Columbia DC Production",
+"number": "10012108"
+},
+{
+"name": "VU District of Columbia DC Refinance",
+"number": "10014315"
+},
+{
+"name": "VU Florida FL LSTier2",
+"number": "10014066"
+},
+{
+"name": "VU Florida FL Overflow",
+"number": "10012210"
+},
+{
+"name": "VU Florida FL Poor Credit",
+"number": "10012310"
+},
+{
+"name": "VU Florida FL Production",
+"number": "10012110"
+},
+{
+"name": "VU Florida FL Refinance",
+"number": "10014317"
+},
+{
+"name": "VU Georgia GA LSTier2",
+"number": "10014067"
+},
+{
+"name": "VU Georgia GA Overflow",
+"number": "10012211"
+},
+{
+"name": "VU Georgia GA Poor Credit",
+"number": "10012311"
+},
+{
+"name": "VU Georgia GA Production",
+"number": "10012111"
+},
+{
+"name": "VU Georgia GA Refinance",
+"number": "10014318"
+},
+{
+"name": "VU Hawaii HI LSTier2",
+"number": "10014068"
+},
+{
+"name": "VU Hawaii HI Overflow",
+"number": "10012212"
+},
+{
+"name": "VU Hawaii HI Poor Credit",
+"number": "10012312"
+},
+{
+"name": "VU Hawaii HI Production",
+"number": "10012112"
+},
+{
+"name": "VU Hawaii HI Refinance",
+"number": "10014319"
+},
+{
+"name": "VU Idaho ID LSTier2",
+"number": "10014070"
+},
+{
+"name": "VU Idaho ID Overflow",
+"number": "10012214"
+},
+{
+"name": "VU Idaho ID Poor Credit",
+"number": "10012314"
+},
+{
+"name": "VU Idaho ID Production",
+"number": "10012114"
+},
+{
+"name": "VU Idaho ID Refinance",
+"number": "10014321"
+},
+{
+"name": "VU Illinois IL LSTier2",
+"number": "10014071"
+},
+{
+"name": "VU Illinois IL Overflow",
+"number": "10012215"
+},
+{
+"name": "VU Illinois IL Poor Credit",
+"number": "10012315"
+},
+{
+"name": "VU Illinois IL Production",
+"number": "10012115"
+},
+{
+"name": "VU Illinois IL Refinance",
+"number": "10014322"
+},
+{
+"name": "VU Indiana IN LSTier2",
+"number": "10014072"
+},
+{
+"name": "VU Indiana IN Overflow",
+"number": "10012216"
+},
+{
+"name": "VU Indiana IN Poor Credit",
+"number": "10012316"
+},
+{
+"name": "VU Indiana IN Production",
+"number": "10012116"
+},
+{
+"name": "VU Indiana IN Refinance",
+"number": "10014323"
+},
+{
+"name": "VU Iowa IA LSTier2",
+"number": "10014069"
+},
+{
+"name": "VU Iowa IA Overflow",
+"number": "10012213"
+},
+{
+"name": "VU Iowa IA Poor Credit",
+"number": "10012313"
+},
+{
+"name": "VU Iowa IA Production",
+"number": "10012113"
+},
+{
+"name": "VU Iowa IA Refinance",
+"number": "10014320"
+},
+{
+"name": "VU Kansas KS LSTier2",
+"number": "10014073"
+},
+{
+"name": "VU Kansas KS Overflow",
+"number": "10012217"
+},
+{
+"name": "VU Kansas KS Poor Credit",
+"number": "10012317"
+},
+{
+"name": "VU Kansas KS Production",
+"number": "10012117"
+},
+{
+"name": "VU Kansas KS Refinance",
+"number": "10014324"
+},
+{
+"name": "VU Kentucky KY LSTier2",
+"number": "10014074"
+},
+{
+"name": "VU Kentucky KY Overflow",
+"number": "10012218"
+},
+{
+"name": "VU Kentucky KY Poor Credit",
+"number": "10012318"
+},
+{
+"name": "VU Kentucky KY Production",
+"number": "10012118"
+},
+{
+"name": "VU Kentucky KY Refinance",
+"number": "10014325"
+},
+{
+"name": "VU Louisiana LA LSTier2",
+"number": "10014075"
+},
+{
+"name": "VU Louisiana LA Overflow",
+"number": "10012219"
+},
+{
+"name": "VU Louisiana LA Poor Credit",
+"number": "10012319"
+},
+{
+"name": "VU Louisiana LA Production",
+"number": "10012119"
+},
+{
+"name": "VU Louisiana LA Refinance",
+"number": "10014326"
+},
+{
+"name": "VU Maine ME LSTier2",
+"number": "10014078"
+},
+{
+"name": "VU Maine ME Overflow",
+"number": "10012222"
+},
+{
+"name": "VU Maine ME Poor Credit",
+"number": "10012322"
+},
+{
+"name": "VU Maine ME Production",
+"number": "10012122"
+},
+{
+"name": "VU Maine ME Refinance",
+"number": "10014329"
+},
+{
+"name": "VU Maryland MD LSTier2",
+"number": "10014077"
+},
+{
+"name": "VU Maryland MD Overflow",
+"number": "10012221"
+},
+{
+"name": "VU Maryland MD Poor Credit",
+"number": "10012321"
+},
+{
+"name": "VU Maryland MD Production",
+"number": "10012121"
+},
+{
+"name": "VU Maryland MD Refinance",
+"number": "10014328"
+},
+{
+"name": "VU Massachusetts MA LSTier2",
+"number": "10014076"
+},
+{
+"name": "VU Massachusetts MA Overflow",
+"number": "10012220"
+},
+{
+"name": "VU Massachusetts MA Poor Credit",
+"number": "10012320"
+},
+{
+"name": "VU Massachusetts MA Production",
+"number": "10012120"
+},
+{
+"name": "VU Massachusetts MA Refinance",
+"number": "10014327"
+},
+{
+"name": "VU Michigan MI LSTier2",
+"number": "10014079"
+},
+{
+"name": "VU Michigan MI Overflow",
+"number": "10012223"
+},
+{
+"name": "VU Michigan MI Poor Credit",
+"number": "10012323"
+},
+{
+"name": "VU Michigan MI Production",
+"number": "10012123"
+},
+{
+"name": "VU Michigan MI Refinance",
+"number": "10014330"
+},
+{
+"name": "VU Minnesota MN LSTier2",
+"number": "10014080"
+},
+{
+"name": "VU Minnesota MN Overflow",
+"number": "10012224"
+},
+{
+"name": "VU Minnesota MN Poor Credit",
+"number": "10012324"
+},
+{
+"name": "VU Minnesota MN Production",
+"number": "10012124"
+},
+{
+"name": "VU Minnesota MN Refinance",
+"number": "10014331"
+},
+{
+"name": "VU Mississippi MS LSTier2",
+"number": "10014082"
+},
+{
+"name": "VU Mississippi MS Overflow",
+"number": "10012226"
+},
+{
+"name": "VU Mississippi MS Poor Credit",
+"number": "10012326"
+},
+{
+"name": "VU Mississippi MS Production",
+"number": "10012126"
+},
+{
+"name": "VU Mississippi MS Refinance",
+"number": "10014333"
+},
+{
+"name": "VU Missouri MO LSTier2",
+"number": "10014081"
+},
+{
+"name": "VU Missouri MO Overflow",
+"number": "10012225"
+},
+{
+"name": "VU Missouri MO Poor Credit",
+"number": "10012325"
+},
+{
+"name": "VU Missouri MO Production",
+"number": "10012125"
+},
+{
+"name": "VU Missouri MO Refinance",
+"number": "10014332"
+},
+{
+"name": "VU Montana MT LSTier2",
+"number": "10014083"
+},
+{
+"name": "VU Montana MT Overflow",
+"number": "10012227"
+},
+{
+"name": "VU Montana MT Poor Credit",
+"number": "10012327"
+},
+{
+"name": "VU Montana MT Production",
+"number": "10012127"
+},
+{
+"name": "VU Montana MT Refinance",
+"number": "10014334"
+},
+{
+"name": "VU Nebraska NE LSTier2",
+"number": "10014086"
+},
+{
+"name": "VU Nebraska NE Overflow",
+"number": "10012230"
+},
+{
+"name": "VU Nebraska NE Poor Credit",
+"number": "10012330"
+},
+{
+"name": "VU Nebraska NE Production",
+"number": "10012130"
+},
+{
+"name": "VU Nebraska NE Refinance",
+"number": "10014337"
+},
+{
+"name": "VU Nevada NV LSTier2",
+"number": "10014090"
+},
+{
+"name": "VU Nevada NV Overflow",
+"number": "10012234"
+},
+{
+"name": "VU Nevada NV Poor Credit",
+"number": "10012334"
+},
+{
+"name": "VU Nevada NV Production",
+"number": "10012134"
+},
+{
+"name": "VU Nevada NV Refinance",
+"number": "10014341"
+},
+{
+"name": "VU New Hampshire NH LSTier2",
+"number": "10014087"
+},
+{
+"name": "VU New Hampshire NH Overflow",
+"number": "10012231"
+},
+{
+"name": "VU New Hampshire NH Poor Credit",
+"number": "10012331"
+},
+{
+"name": "VU New Hampshire NH Production",
+"number": "10012131"
+},
+{
+"name": "VU New Hampshire NH Refinance",
+"number": "10014338"
+},
+{
+"name": "VU New Jersey NJ LSTier2",
+"number": "10014088"
+},
+{
+"name": "VU New Jersey NJ Overflow",
+"number": "10012232"
+},
+{
+"name": "VU New Jersey NJ Poor Credit",
+"number": "10012332"
+},
+{
+"name": "VU New Jersey NJ Production",
+"number": "10012132"
+},
+{
+"name": "VU New Jersey NJ Refinance",
+"number": "10014339"
+},
+{
+"name": "VU New Mexico NM LSTier2",
+"number": "10014089"
+},
+{
+"name": "VU New Mexico NM Overflow",
+"number": "10012233"
+},
+{
+"name": "VU New Mexico NM Poor Credit",
+"number": "10012333"
+},
+{
+"name": "VU New Mexico NM Production",
+"number": "10012133"
+},
+{
+"name": "VU New Mexico NM Refinance",
+"number": "10014340"
+},
+{
+"name": "VU New York NY LSTier2",
+"number": "10014091"
+},
+{
+"name": "VU New York NY Overflow",
+"number": "10012235"
+},
+{
+"name": "VU New York NY Poor Credit",
+"number": "10012335"
+},
+{
+"name": "VU New York NY Production",
+"number": "10012135"
+},
+{
+"name": "VU New York NY Refinance",
+"number": "10014342"
+},
+{
+"name": "VU North Carolina NC LSTier2",
+"number": "10014084"
+},
+{
+"name": "VU North Carolina NC Overflow",
+"number": "10012228"
+},
+{
+"name": "VU North Carolina NC Poor Credit",
+"number": "10012328"
+},
+{
+"name": "VU North Carolina NC Production",
+"number": "10012128"
+},
+{
+"name": "VU North Carolina NC Refinance",
+"number": "10014335"
+},
+{
+"name": "VU North Dakota ND LSTier2",
+"number": "10014085"
+},
+{
+"name": "VU North Dakota ND Overflow",
+"number": "10012229"
+},
+{
+"name": "VU North Dakota ND Poor Credit",
+"number": "10012329"
+},
+{
+"name": "VU North Dakota ND Production",
+"number": "10012129"
+},
+{
+"name": "VU North Dakota ND Refinance",
+"number": "10014336"
+},
+{
+"name": "VU Ohio OH LSTier2",
+"number": "10014092"
+},
+{
+"name": "VU Ohio OH Overflow",
+"number": "10012236"
+},
+{
+"name": "VU Ohio OH Poor Credit",
+"number": "10012336"
+},
+{
+"name": "VU Ohio OH Production",
+"number": "10012136"
+},
+{
+"name": "VU Ohio OH Refinance",
+"number": "10014343"
+},
+{
+"name": "VU Oklahoma OK LSTier2",
+"number": "10014093"
+},
+{
+"name": "VU Oklahoma OK Overflow",
+"number": "10012237"
+},
+{
+"name": "VU Oklahoma OK Poor Credit",
+"number": "10012337"
+},
+{
+"name": "VU Oklahoma OK Production",
+"number": "10012137"
+},
+{
+"name": "VU Oklahoma OK Refinance",
+"number": "10014344"
+},
+{
+"name": "VU Oregon OR LSTier2",
+"number": "10014094"
+},
+{
+"name": "VU Oregon OR Overflow",
+"number": "10012238"
+},
+{
+"name": "VU Oregon OR Poor Credit",
+"number": "10012338"
+},
+{
+"name": "VU Oregon OR Production",
+"number": "10012138"
+},
+{
+"name": "VU Oregon OR Refinance",
+"number": "10014345"
+},
+{
+"name": "VU Pennsylvania PA LSTier2",
+"number": "10014095"
+},
+{
+"name": "VU Pennsylvania PA Overflow",
+"number": "10012239"
+},
+{
+"name": "VU Pennsylvania PA Poor Credit",
+"number": "10012339"
+},
+{
+"name": "VU Pennsylvania PA Production",
+"number": "10012139"
+},
+{
+"name": "VU Pennsylvania PA Refinance",
+"number": "10014346"
+},
+{
+"name": "VU Rhode Island RI LSTier2",
+"number": "10014096"
+},
+{
+"name": "VU Rhode Island RI Overflow",
+"number": "10012240"
+},
+{
+"name": "VU Rhode Island RI Poor Credit",
+"number": "10012340"
+},
+{
+"name": "VU Rhode Island RI Production",
+"number": "10012140"
+},
+{
+"name": "VU Rhode Island RI Refinance",
+"number": "10014347"
+},
+{
+"name": "VU South Carolina SC LSTier2",
+"number": "10014097"
+},
+{
+"name": "VU South Carolina SC Overflow",
+"number": "10012241"
+},
+{
+"name": "VU South Carolina SC Poor Credit",
+"number": "10012341"
+},
+{
+"name": "VU South Carolina SC Production",
+"number": "10012141"
+},
+{
+"name": "VU South Carolina SC Refinance",
+"number": "10014348"
+},
+{
+"name": "VU South Dakota SD LSTier2",
+"number": "10014098"
+},
+{
+"name": "VU South Dakota SD Overflow",
+"number": "10012242"
+},
+{
+"name": "VU South Dakota SD Poor Credit",
+"number": "10012342"
+},
+{
+"name": "VU South Dakota SD Production",
+"number": "10012142"
+},
+{
+"name": "VU South Dakota SD Refinance",
+"number": "10014349"
+},
+{
+"name": "VU Tennessee TN LSTier2",
+"number": "10014099"
+},
+{
+"name": "VU Tennessee TN Overflow",
+"number": "10012243"
+},
+{
+"name": "VU Tennessee TN Poor Credit",
+"number": "10012343"
+},
+{
+"name": "VU Tennessee TN Production",
+"number": "10012143"
+},
+{
+"name": "VU Tennessee TN Refinance",
+"number": "10014350"
+},
+{
+"name": "VU Texas TX LSTier2",
+"number": "10014100"
+},
+{
+"name": "VU Texas TX Overflow",
+"number": "10012244"
+},
+{
+"name": "VU Texas TX Poor Credit",
+"number": "10012344"
+},
+{
+"name": "VU Texas TX Production",
+"number": "10012144"
+},
+{
+"name": "VU Texas TX Refinance",
+"number": "10014351"
+},
+{
+"name": "VU Utah UT LSTier2",
+"number": "10014101"
+},
+{
+"name": "VU Utah UT Overflow",
+"number": "10012245"
+},
+{
+"name": "VU Utah UT Poor Credit",
+"number": "10012345"
+},
+{
+"name": "VU Utah UT Production",
+"number": "10012145"
+},
+{
+"name": "VU Utah UT Refinance",
+"number": "10014352"
+},
+{
+"name": "VU Vermont VT LSTier2",
+"number": "10014103"
+},
+{
+"name": "VU Vermont VT Overflow",
+"number": "10012247"
+},
+{
+"name": "VU Vermont VT Poor Credit",
+"number": "10012347"
+},
+{
+"name": "VU Vermont VT Production",
+"number": "10012147"
+},
+{
+"name": "VU Vermont VT Refinance",
+"number": "10014354"
+},
+{
+"name": "VU Virginia VA LSTier2",
+"number": "10014102"
+},
+{
+"name": "VU Virginia VA Overflow",
+"number": "10012246"
+},
+{
+"name": "VU Virginia VA Poor Credit",
+"number": "10012346"
+},
+{
+"name": "VU Virginia VA Production",
+"number": "10012146"
+},
+{
+"name": "VU Virginia VA Refinance",
+"number": "10014353"
+},
+{
+"name": "VU Washington WA LSTier2",
+"number": "10014104"
+},
+{
+"name": "VU Washington WA Overflow",
+"number": "10012248"
+},
+{
+"name": "VU Washington WA Poor Credit",
+"number": "10012348"
+},
+{
+"name": "VU Washington WA Production",
+"number": "10012148"
+},
+{
+"name": "VU Washington WA Refinance",
+"number": "10014355"
+},
+{
+"name": "VU West Virginia WV LSTier2",
+"number": "10014106"
+},
+{
+"name": "VU West Virginia WV Overflow",
+"number": "10012250"
+},
+{
+"name": "VU West Virginia WV Poor Credit",
+"number": "10012350"
+},
+{
+"name": "VU West Virginia WV Production",
+"number": "10012150"
+},
+{
+"name": "VU West Virginia WV Refinance",
+"number": "10014356"
+},
+{
+"name": "VU Wisconsin WI LSTier2",
+"number": "10014105"
+},
+{
+"name": "VU Wisconsin WI Overflow",
+"number": "10012249"
+},
+{
+"name": "VU Wisconsin WI Poor Credit",
+"number": "10012349"
+},
+{
+"name": "VU Wisconsin WI Production",
+"number": "10012149"
+},
+{
+"name": "VU Wisconsin WI Refinance",
+"number": "10014358"
+},
+{
+"name": "VU Wyoming WY LSTier2",
+"number": "10014107"
+},
+{
+"name": "VU Wyoming WY Overflow",
+"number": "10012251"
+},
+{
+"name": "VU Wyoming WY Poor Credit",
+"number": "10012351"
+},
+{
+"name": "VU Wyoming WY Production",
+"number": "10012151"
+},
+{
+"name": "VU Wyoming WY Refinance",
+"number": "10014357"
+},
+{
+"name": "VUHL Branch MO Lake of the Ozarks",
+"number": "3530"
+},
+{
+"name": "VUHL Client Advocate",
+"number": "10012601"
+},
+{
+"name": "VUHL Mr. Cooper-VUHL Mr. Cooper",
+"number": "8556833101"
+},
+{
+"name": "VUI Alabama AL",
+"number": "10001017"
+},
+{
+"name": "VUI Alaska AK",
+"number": "10001016"
+},
+{
+"name": "VUI Arizona AZ",
+"number": "10001019"
+},
+{
+"name": "VUI Arkansas AR",
+"number": "10001018"
+},
+{
+"name": "VUI Colorado CO",
+"number": "10001020"
+},
+{
+"name": "VUI Connecticut CT",
+"number": "10001021"
+},
+{
+"name": "VUI Delaware DE",
+"number": "10001023"
+},
+{
+"name": "VUI District of Columbia DC",
+"number": "10001022"
+},
+{
+"name": "VUI Florida FL",
+"number": "10001024"
+},
+{
+"name": "VUI Georgia GA",
+"number": "10001025"
+},
+{
+"name": "VUI Hawaii HI",
+"number": "10001026"
+},
+{
+"name": "VUI Idaho ID",
+"number": "10001028"
+},
+{
+"name": "VUI Illinois IL",
+"number": "10001029"
+},
+{
+"name": "VUI Indiana IN",
+"number": "10001030"
+},
+{
+"name": "VUI Iowa IA",
+"number": "10001027"
+},
+{
+"name": "VUI Kansas KS",
+"number": "10001031"
+},
+{
+"name": "VUI Kentucky KY",
+"number": "10001032"
+},
+{
+"name": "VUI Louisiana LA",
+"number": "10001033"
+},
+{
+"name": "VUI Maine ME",
+"number": "10001035"
+},
+{
+"name": "VUI Maryland MD",
+"number": "10001034"
+},
+{
+"name": "VUI Michigan MI",
+"number": "10001036"
+},
+{
+"name": "VUI Minnesota MN",
+"number": "10001037"
+},
+{
+"name": "VUI Mississippi MS",
+"number": "10001039"
+},
+{
+"name": "VUI Missouri MO",
+"number": "10001038"
+},
+{
+"name": "VUI Montana MT",
+"number": "10001040"
+},
+{
+"name": "VUI Nebraska NE",
+"number": "10001043"
+},
+{
+"name": "VUI Nevada NV",
+"number": "10001047"
+},
+{
+"name": "VUI New Hampshire NH",
+"number": "10001044"
+},
+{
+"name": "VUI New Jersey NJ",
+"number": "10001045"
+},
+{
+"name": "VUI New Mexico NM",
+"number": "10001046"
+},
+{
+"name": "VUI New York NY",
+"number": "10001048"
+},
+{
+"name": "VUI North Carolina NC",
+"number": "10001041"
+},
+{
+"name": "VUI North Dakota ND",
+"number": "10001042"
+},
+{
+"name": "VUI Ohio OH",
+"number": "10001049"
+},
+{
+"name": "VUI Oklahoma OK",
+"number": "10001050"
+},
+{
+"name": "VUI Oregon OR",
+"number": "10001051"
+},
+{
+"name": "VUI Pennsylvania PA",
+"number": "10001052"
+},
+{
+"name": "VUI Rhode Island RI",
+"number": "10001053"
+},
+{
+"name": "VUI South Carolina SC",
+"number": "10001054"
+},
+{
+"name": "VUI South Dakota SD",
+"number": "10001055"
+},
+{
+"name": "VUI Tennessee TN",
+"number": "10001056"
+},
+{
+"name": "VUI Texas TX",
+"number": "10001057"
+},
+{
+"name": "VUI Utah UT",
+"number": "10001058"
+},
+{
+"name": "VUI Vermont VT",
+"number": "10001060"
+},
+{
+"name": "VUI Virginia VA",
+"number": "10001059"
+},
+{
+"name": "VUI Washington WA",
+"number": "10001061"
+},
+{
+"name": "VUI West Virginia WV",
+"number": "10001062"
+},
+{
+"name": "VUI Wisconsin WI",
+"number": "10001063"
+},
+{
+"name": "VUI Wyoming WY",
+"number": "10001064"
+},
+{
+"name": "VUR Agent Coordinators",
+"number": "10012655"
+},
+{
+"name": "WA IRRRL Mailer",
+"number": "10000149"
+},
+{
+"name": "WI IRRRL Mailer",
+"number": "10000151"
+},
+{
+"name": "WV IRRRL Mailer",
+"number": "10000150"
+},
+{
+"name": "WY IRRRL Mailer",
+"number": "10000152"
+}
+];
 
     function renderContacts() {
       const container = document.getElementById('contactsContainer');
@@ -56,22 +2181,29 @@
     }
 
     function dialContact(number, name) {
-      console.log('[Business Contacts] Attempting dial:', name, number);
+      console.log('[Quick Dial] Dial requested:', { name, number });
       
-      // Use postMessage (cross-origin safe)
       try {
-        window.parent.postMessage({
-          type: 'DIAL_NUMBER',
-          number: number,
-          name: name
-        }, '*');
-        console.log('[Business Contacts] PostMessage sent');
-      } catch (e) {
-        console.error('[Business Contacts] PostMessage error:', e);
+        // Try accessing Cisco Agent Desktop API directly
+        if (window.parent && window.parent.agentx && window.parent.agentx.desktop && window.parent.agentx.desktop.dialer) {
+          console.log('[Quick Dial] Agent Desktop API found, initiating call...');
+          window.parent.agentx.desktop.dialer.startOutdialContact(number);
+          console.log('[Quick Dial] Call initiated successfully');
+          return; // Success - exit function
+        }
+        
+        // API not found - log what's available
+        console.warn('[Quick Dial] Agent Desktop API not found');
+        console.log('[Quick Dial] window.parent:', window.parent);
+        console.log('[Quick Dial] window.parent.agentx:', window.parent ? window.parent.agentx : 'N/A');
+        
+        // Show error message
+        alert('Unable to place call.\n\nContact: ' + name + '\nNumber: ' + number + '\n\nThe Cisco Agent Desktop API was not detected. Please ensure:\n1. This widget is loaded inside Cisco Agent Desktop\n2. You have dialing permissions\n3. The layout is properly configured');
+        
+      } catch (error) {
+        console.error('[Quick Dial] Error accessing dialer:', error);
+        alert('Error: ' + error.message + '\n\nContact: ' + name + '\nNumber: ' + number);
       }
-      
-      // Fallback alert for testing
-      alert('Dial: ' + name + '\nNumber: ' + number + '\n\nNote: This widget requires Cisco Agent Desktop API integration to actually place calls.');
     }
 
     function filterContacts() {
@@ -98,6 +2230,17 @@
         noResults.classList.add('hidden');
         document.getElementById('contactsContainer').classList.remove('hidden');
       }
+    }
+
+    // Debug: Log what's available on page load
+    console.log('[Quick Dial] Widget loaded');
+    console.log('[Quick Dial] Checking parent window access...');
+    try {
+      console.log('[Quick Dial] window.parent exists:', !!window.parent);
+      console.log('[Quick Dial] window.parent.agentx exists:', !!(window.parent && window.parent.agentx));
+      console.log('[Quick Dial] Dialer API exists:', !!(window.parent && window.parent.agentx && window.parent.agentx.desktop && window.parent.agentx.desktop.dialer));
+    } catch (e) {
+      console.error('[Quick Dial] Error checking parent:', e);
     }
 
     renderContacts();
