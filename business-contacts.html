@@ -2,7 +2,6 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="https://unpkg.com/@wxcc-desktop/sdk@latest/dist/index.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; padding: 16px; background: #f5f5f5; }
@@ -2174,22 +2173,39 @@
     async function initSDK() {
       try {
         console.log('[Quick Dial] Initializing Webex Desktop SDK...');
+        console.log('[Quick Dial] Checking window object keys:', Object.keys(window));
         
-        // Wait for SDK to be available
-        if (typeof window.WxCCDesktop !== 'undefined' && window.WxCCDesktop.Desktop) {
+        // Try multiple ways to access the Desktop SDK
+        if (window.Desktop) {
+          Desktop = window.Desktop;
+          console.log('[Quick Dial] Found Desktop at window.Desktop');
+        } else if (window.WxCCDesktop && window.WxCCDesktop.Desktop) {
           Desktop = window.WxCCDesktop.Desktop;
-        } else if (typeof window.CiscoWxCCDesktop !== 'undefined' && window.CiscoWxCCDesktop.Desktop) {
+          console.log('[Quick Dial] Found Desktop at window.WxCCDesktop.Desktop');
+        } else if (window.CiscoWxCCDesktop && window.CiscoWxCCDesktop.Desktop) {
           Desktop = window.CiscoWxCCDesktop.Desktop;
+          console.log('[Quick Dial] Found Desktop at window.CiscoWxCCDesktop.Desktop');
+        } else if (window.parent && window.parent.Desktop) {
+          Desktop = window.parent.Desktop;
+          console.log('[Quick Dial] Found Desktop at window.parent.Desktop');
         }
         
         if (!Desktop) {
-          throw new Error('Desktop SDK not found in window object');
+          console.warn('[Quick Dial] Desktop object not found in any location');
+          console.log('[Quick Dial] Available window keys:', Object.keys(window).filter(k => k.includes('Desktop') || k.includes('Wx') || k.includes('Cisco')));
+          throw new Error('Desktop SDK not found');
         }
 
-        await Desktop.config.init();
+        // Try to initialize if method exists
+        if (Desktop.config && typeof Desktop.config.init === 'function') {
+          await Desktop.config.init();
+          console.log('[Quick Dial] Desktop.config.init() completed');
+        }
+        
         isSDKReady = true;
         console.log('[Quick Dial] SDK initialized successfully');
         console.log('[Quick Dial] Desktop object:', Desktop);
+        console.log('[Quick Dial] Desktop.dialer:', Desktop.dialer);
         
         showStatus('✅ Connected to Cisco Agent Desktop', 'success');
         setTimeout(() => hideStatus(), 3000);
@@ -2285,13 +2301,29 @@
 
     // Initialize on load
     window.addEventListener('DOMContentLoaded', async () => {
-      console.log('[Quick Dial] Widget loaded');
+      console.log('[Quick Dial] Widget loaded - DOMContentLoaded');
       renderContacts();
       
-      // Wait a bit for SDK to load
-      setTimeout(async () => {
+      // Try initializing SDK multiple times with increasing delays
+      const tryInit = async (attempt = 1) => {
+        console.log(`[Quick Dial] SDK init attempt ${attempt}/5`);
         await initSDK();
-      }, 1000);
+        
+        if (!isSDKReady && attempt < 5) {
+          setTimeout(() => tryInit(attempt + 1), attempt * 1000);
+        }
+      };
+      
+      // Start trying after a brief delay
+      setTimeout(() => tryInit(), 500);
+    });
+    
+    // Also try on window.load
+    window.addEventListener('load', async () => {
+      console.log('[Quick Dial] Window fully loaded');
+      if (!isSDKReady) {
+        setTimeout(async () => await initSDK(), 2000);
+      }
     });
   </script>
 </body>
