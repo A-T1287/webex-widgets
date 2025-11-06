@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Dial - Tel Protocol</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; padding: 16px; background: #f5f5f5; }
+    .header { 
+      background: linear-gradient(135deg, #049fd9 0%, #0288c4 100%); 
+      color: white; 
+      padding: 14px 16px; 
+      border-radius: 8px; 
+      margin-bottom: 16px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header h3 { margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+    .protocol-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .search-container { margin-bottom: 16px; }
+    .search-input {
+      width: 100%; 
+      padding: 12px 16px; 
+      border: 2px solid #e0e0e0; 
+      border-radius: 8px;
+      font-size: 14px; 
+      transition: all 0.2s;
+      background: white;
+    }
+    .search-input:focus {
+      outline: none; 
+      border-color: #049fd9; 
+      box-shadow: 0 0 0 4px rgba(4,159,217,0.1);
+    }
+    .info-banner {
+      background: #e3f2fd;
+      border-left: 4px solid #049fd9;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #1565c0;
+      line-height: 1.5;
+    }
+    .info-banner strong { color: #0d47a1; }
+    .speed-dial-container { 
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px; 
+      max-height: calc(100vh - 280px); 
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .speed-dial-container::-webkit-scrollbar { width: 8px; }
+    .speed-dial-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+    .speed-dial-container::-webkit-scrollbar-thumb { background: #049fd9; border-radius: 4px; }
+    .speed-dial-container::-webkit-scrollbar-thumb:hover { background: #0288c4; }
+    
+    .speed-dial-item {
+      background: white; 
+      border: 2px solid #e0e0e0; 
+      border-radius: 8px;
+      padding: 14px 16px; 
+      cursor: pointer; 
+      transition: all 0.2s;
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .speed-dial-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(4,159,217,0.05) 0%, rgba(2,136,196,0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .speed-dial-item:hover {
+      background: white;
+      border-color: #049fd9;
+      box-shadow: 0 4px 12px rgba(4,159,217,0.2);
+      transform: translateY(-2px);
+    }
+    .speed-dial-item:hover::before {
+      opacity: 1;
+    }
+    .speed-dial-item:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(4,159,217,0.2);
+    }
+    .contact-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      opacity: 0.3;
+      transition: all 0.2s;
+    }
+    .speed-dial-item:hover .contact-icon {
+      opacity: 0.6;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .name { 
+      font-size: 14px; 
+      font-weight: 600; 
+      color: #333; 
+      position: relative;
+      z-index: 1;
+      padding-right: 32px;
+    }
+    .number { 
+      font-size: 13px; 
+      color: #666; 
+      font-family: 'Courier New', monospace;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tel-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: #049fd9;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .tel-icon::after {
+      content: '📞';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+    }
+    .hidden { display: none !important; }
+    .no-results { 
+      text-align: center; 
+      color: #666; 
+      padding: 48px 16px;
+      background: white;
+      border-radius: 8px;
+      border: 2px dashed #e0e0e0;
+    }
+    .no-results-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+    .stats {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      padding: 8px;
+      background: white;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h3>
+      📞 Quick Dial Contacts
+      <span class="protocol-badge">tel: protocol</span>
+    </h3>
+  </div>
+  
+  <div class="info-banner">
+    <strong>✨ Click-to-Call Enabled:</strong> Click any contact to initiate a call using the <code>tel:</code> protocol, which will open your default calling app (Webex, Teams, etc.).
+  </div>
+  
+  <div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search by name or number..." oninput="filterContacts()" autocomplete="off">
+  </div>
+  
+  <div class="stats" id="statsDisplay">Loading contacts...</div>
+  
+  <div id="noResults" class="no-results hidden">
+    <div class="no-results-icon">🔍</div>
+    <strong>No contacts found</strong>
+    <p style="margin-top: 8px; font-size: 13px;">Try a different search term</p>
+  </div>
+  
+  <div class="speed-dial-container" id="contactsContainer"></div>
+  
+  <script>
+    const CONTACTS = [
+{"name": "#NAME?", "number": "10012153"},
+{"name": "AK IRRRL Mailer", "number": "10000102"},
+{"name": "AL IRRRL Mailer", "number": "10000103"},
+{"name": "Andrew Townsend", "number": "5736456752"},
+{"name": "AR IRRRL Mailer", "number": "10000104"},
+{"name": "ARN-ARN", "number": "10012672"},
+{"name": "AZ IRRRL Mailer", "number": "10000105"},
+{"name": "Branch_Augusta GA", "number": "10012506"},
+{"name": "Branch_Austin TX", "number": "10012529"},
+{"name": "Branch_Bellevue NE", "number": "10012519"},
+{"name": "Branch_Clarksville TN", "number": "10012523"},
+{"name": "Branch_Colorado_Springs CO", "number": "10012504"},
+{"name": "Branch_Elizabethtown KY", "number": "10012512"},
+{"name": "Branch_Enterprise AL", "number": "10012502"},
+{"name": "Branch_Fayetteville NC", "number": "10012517"},
+{"name": "Branch_Hinesville GA", "number": "10012530"},
+{"name": "Branch_Jacksonville NC", "number": "10012518"},
+{"name": "Branch_Killeen TX", "number": "10012524"},
+{"name": "Branch_Lawton OK", "number": "10012520"},
+{"name": "Branch_Lighthouse MO", "number": "10012514"},
+{"name": "Branch_Mountain_Home ID", "number": "10012509"},
+{"name": "Branch_Piedmont SC", "number": "10012521"},
+{"name": "Branch_Puyallup WA", "number": "10012528"},
+{"name": "Branch_Richmond VA", "number": "10012526"},
+{"name": "Branch_San_Antonio TX", "number": "10012525"},
+{"name": "Branch_San_Diego CA", "number": "10012503"},
+{"name": "Branch_Savannah GA", "number": "10012507"},
+{"name": "Branch_Scott_AFB IL", "number": "10012511"},
+{"name": "Branch_Tampa FL", "number": "10012505"},
+{"name": "Branch_Virginia_Beach VA", "number": "10012527"},
+{"name": "Branch_Waipio HI", "number": "10012508"},
+{"name": "CA IRRRL Mailer", "number": "10000106"},
+{"name": "Cenlar-Cenlar", "number": "10000090"},
+{"name": "CO IRRRL Mailer", "number": "10000107"},
+{"name": "Concierge Desk Corp-Concierge Desk Corp", "number": "10012609"},
+{"name": "Corp-CSR_MyVU", "number": "10012622"},
+{"name": "Corp-CSR_Pmts Internal", "number": "10012614"},
+{"name": "Corp-CSR_Pmts LoanQ", "number": "10012613"},
+{"name": "Corp-CSR_Spanish", "number": "10012656"},
+{"name": "Corp-CSR_SR1", "number": "10012615"},
+{"name": "Corp-CSR_Team Leads", "number": "10012617"},
+{"name": "CSR Intern_Desk", "number": "10012685"},
+{"name": "CSR_NB_ MyAcct_INT", "number": "10012671"},
+{"name": "CT IRRRL Mailer", "number": "10000108"},
+{"name": "DC IRRRL Mailer", "number": "10000110"},
+{"name": "DCI", "number": "8772262351"},
+{"name": "DE IRRRL Mailer", "number": "10000109"},
+{"name": "Equifax", "number": "8667463780"},
+{"name": "First Res Alabama AL Production", "number": "10013201"},
+{"name": "First Res Alaska AK Production", "number": "10013200"},
+{"name": "First Res Arizona AZ Production", "number": "10013203"},
+{"name": "First Res Arkansas AR Production", "number": "10013202"},
+{"name": "First Res California CA Production", "number": "10013204"},
+{"name": "First Res Colorado CO Production", "number": "10013205"},
+{"name": "First Res Connecticut CT Production", "number": "10013206"},
+{"name": "First Res Delaware DE Production", "number": "10013208"},
+{"name": "First Res District of Columbia DC Production", "number": "10013207"},
+{"name": "First Res Florida FL Production", "number": "10013209"},
+{"name": "First Res Georgia GA Production", "number": "10013210"},
+{"name": "First Res Hawaii HI Production", "number": "10013211"},
+{"name": "First Res Idaho ID Production", "number": "10013213"},
+{"name": "First Res Illinois IL Production", "number": "10013214"},
+{"name": "First Res Indiana IN Production", "number": "10013215"},
+{"name": "First Res Iowa IA Production", "number": "10013212"},
+{"name": "First Res Kansas KS Production", "number": "10013216"},
+{"name": "First Res Kentucky KY Production", "number": "10013217"},
+{"name": "First Res Louisiana LA Production", "number": "10013218"},
+{"name": "First Res Maine ME Production", "number": "10013221"},
+{"name": "First Res Maryland MD Production", "number": "10013220"},
+{"name": "First Res Massachusetts MA Production", "number": "10013219"},
+{"name": "First Res Michigan MI Production", "number": "10013222"},
+{"name": "First Res Minnesota MN Production", "number": "10013223"},
+{"name": "First Res Mississippi MS Production", "number": "10013225"},
+{"name": "First Res Missouri MO Production", "number": "10013224"},
+{"name": "First Res Montana MT Production", "number": "10013226"},
+{"name": "First Res Nebraska NE Production", "number": "10013229"},
+{"name": "First Res Nevada NV Production", "number": "10013233"},
+{"name": "First Res New Hampshire NH Production", "number": "10013230"},
+{"name": "First Res New Jersey NJ Production", "number": "10013231"},
+{"name": "First Res New Mexico NM Production", "number": "10013232"},
+{"name": "First Res New York NY Production", "number": "10013234"},
+{"name": "First Res North Carolina NC Production", "number": "10013227"},
+{"name": "First Res North Dakota ND Production", "number": "10013228"},
+{"name": "First Res Ohio OH Production", "number": "10013235"},
+{"name": "First Res Oklahoma OK Production", "number": "10013236"},
+{"name": "First Res Oregon OR Production", "number": "10013237"},
+{"name": "First Res Pennsylvania PA Production", "number": "10013238"},
+{"name": "First Res Rhode Island RI Production", "number": "10013239"},
+{"name": "First Res Servicing Help Int Corp-First Res Servicing Help Int Corp", "number": "10013058"},
+{"name": "First Res South Carolina SC Production", "number": "10013240"},
+{"name": "First Res South Dakota SD Production", "number": "10013241"},
+{"name": "First Res Tennessee TN Production", "number": "10013242"},
+{"name": "First Res Texas TX Production", "number": "10013243"},
+{"name": "First Res Utah UT Production", "number": "10013244"},
+{"name": "First Res Vermont VT Production", "number": "10013246"},
+{"name": "First Res Virginia VA Production", "number": "10013245"},
+{"name": "First Res Washington WA Production", "number": "10013247"},
+{"name": "First Res West Virginia WV Production", "number": "10013249"},
+{"name": "First Res Wisconsin WI Production", "number": "10013248"},
+{"name": "First Res Wyoming WY Production", "number": "10013250"},
+{"name": "First Res-Mr. Cooper", "number": "8339812054"},
+{"name": "First Res_ClientAdv", "number": "10012356"},
+{"name": "First_Res_Payment_Processing", "number": "10012687"},
+{"name": "FL IRRRL Mailer", "number": "10000111"},
+{"name": "GA IRRRL Mailer", "number": "10000112"},
+{"name": "HI IRRRL Mailer", "number": "10000113"},
+{"name": "IA IRRRL Mailer", "number": "10000117"},
+{"name": "ID IRRRL Mailer", "number": "10000114"},
+{"name": "IL IRRRL Mailer", "number": "10000115"},
+{"name": "IN IRRRL Mailer", "number": "10000116"},
+{"name": "Insurance-PIA_Trans", "number": "10012621"},
+{"name": "IT Help Desk Corp-IT Help Desk Corp", "number": "10012619"},
+{"name": "KS IRRRL Mailer", "number": "10000118"},
+{"name": "KY IRRRL Mailer", "number": "10000119"},
+{"name": "LA IRRRL Mailer", "number": "10000120"},
+{"name": "Legal Client Relations Managers", "number": "10000030"},
+{"name": "Lighthouse Complaints-Lighthouse Complaints", "number": "10012654"},
+{"name": "LoanCare First Residential", "number": "8889735798"},
+{"name": "LoanCare VUHL", "number": "8005091319"},
+{"name": "MA IRRRL Mailer", "number": "10000123"},
+{"name": "MD IRRRL Mailer", "number": "10000122"},
+{"name": "ME IRRRL Mailer", "number": "10000121"},
+{"name": "MI IRRRL Mailer", "number": "10000124"},
+{"name": "MN IRRRL Mailer", "number": "10000125"},
+{"name": "MO IRRRL Mailer", "number": "10000127"},
+{"name": "Mr. Cooper VU Employee Only", "number": "10000087"},
+{"name": "MS IRRRL Mailer", "number": "10000126"},
+{"name": "MT IRRRL Mailer", "number": "10000128"},
+{"name": "MyAccount Internal", "number": "10014002"},
+{"name": "NB Payment Processing", "number": "10012686"},
+{"name": "NB Post Closing", "number": "10014551"},
+{"name": "NB Servicing Help Int Corp-NB Servicing Help Int Corp", "number": "10013059"},
+{"name": "NB_ClientAdv", "number": "10012355"},
+{"name": "NC IRRRL Mailer", "number": "10000135"},
+{"name": "ND IRRRL Mailer", "number": "10000136"},
+{"name": "NE IRRRL Mailer", "number": "10000129"},
+{"name": "Neighbors Bank All states", "number": "10014117"},
+{"name": "Neighbors Bank Clarence MO Location", "number": "6606992343"},
+{"name": "Neighbors Bank High DTI Purchase", "number": "10015121"},
+{"name": "Neighbors Bank Refinance All states", "number": "10014171"},
+{"name": "NH IRRRL Mailer", "number": "10000131"},
+{"name": "NJ IRRRL Mailer", "number": "10000132"},
+{"name": "NM IRRRL Mailer", "number": "10000133"},
+{"name": "NV IRRRL Mailer", "number": "10000130"},
+{"name": "NY IRRRL Mailer", "number": "10000134"},
+{"name": "OH IRRRL Mailer", "number": "10000137"},
+{"name": "OK IRRRL Mailer", "number": "10000138"},
+{"name": "OR IRRRL Mailer", "number": "10000139"},
+{"name": "PA IRRRL Mailer", "number": "10000140"},
+{"name": "Payment Processing", "number": "10012602"},
+{"name": "PIA Anniversary Insurance-PIA Anniversary Insurance", "number": "10013056"},
+{"name": "PIA Customer Service Insuranc-PIA Customer Service Insuranc", "number": "10013055"},
+{"name": "PIA Sales Insurance-PIA Sales Insurance", "number": "10013054"},
+{"name": "Platinum Desk Transfer-Platimum Desk", "number": "10012657"},
+{"name": "RI IRRRL Mailer", "number": "10000141"},
+{"name": "SC IRRRL Mailer", "number": "10000142"},
+{"name": "SD IRRRL Mailer", "number": "10000143"},
+{"name": "Specialty LO Leadership", "number": "10000032"},
+{"name": "Srv Corp-Client Adv", "number": "10012676"},
+{"name": "TN IRRRL Mailer", "number": "10000144"},
+{"name": "Transfer To New LO Trainers-New LO Trainers", "number": "10012658"},
+{"name": "TX IRRRL Mailer", "number": "10000145"},
+{"name": "UT IRRRL Mailer", "number": "10000146"},
+{"name": "VA IRRRL Mailer", "number": "10000148"},
+{"name": "Veteran Crisis Line-Veteran Crisis Line", "number": "8002738255"},
+{"name": "Veterans United Insurance VUI", "number": "10012651"},
+{"name": "Veterans United Realty VUR", "number": "10012627"},
+{"name": "VT IRRRL Mailer", "number": "10000147"},
+{"name": "WA IRRRL Mailer", "number": "10000149"},
+{"name": "WI IRRRL Mailer", "number": "10000151"},
+{"name": "WV IRRRL Mailer", "number": "10000150"},
+{"name": "WY IRRRL Mailer", "number": "10000152"}
+];
+
+    let allContacts = [...CONTACTS];
+
+    function renderContacts(contactsToRender = allContacts) {
+      const container = document.getElementById('contactsContainer');
+      const html = contactsToRender.map(c => `
+        <a href="tel:${c.number}" class="speed-dial-item" data-name="${escapeHtml(c.name)}" data-number="${c.number}">
+          <div class="name">${escapeHtml(c.name)}</div>
+          <div class="number">
+            <span class="tel-icon"></span>
+            ${c.number}
+          </div>
+          <div class="contact-icon">☎️</div>
+        </a>
+      `).join('');
+      container.innerHTML = html;
+      updateStats(contactsToRender.length);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function updateStats(visibleCount) {
+      const statsDisplay = document.getElementById('statsDisplay');
+      if (visibleCount === allContacts.length) {
+        statsDisplay.textContent = `Showing all ${allContacts.length} contacts`;
+      } else {
+        statsDisplay.textContent = `Showing ${visibleCount} of ${allContacts.length} contacts`;
+      }
+    }
+
+    function filterContacts() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const noResults = document.getElementById('noResults');
+      const container = document.getElementById('contactsContainer');
+
+      if (!searchTerm) {
+        renderContacts(allContacts);
+        noResults.classList.add('hidden');
+        container.classList.remove('hidden');
+        return;
+      }
+
+      const filtered = allContacts.filter(contact => {
+        const name = contact.name.toLowerCase();
+        const number = contact.number.toLowerCase();
+        return name.includes(searchTerm) || number.includes(searchTerm);
+      });
+
+      if (filtered.length === 0) {
+        noResults.classList.remove('hidden');
+        container.classList.add('hidden');
+        updateStats(0);
+      } else {
+        noResults.classList.add('hidden');
+        container.classList.remove('hidden');
+        renderContacts(filtered);
+      }
+    }
+
+    // Initialize
+    renderContacts();
+
+    // Add event listener for contact clicks to log
+    document.addEventListener('click', function(e) {
+      const contactItem = e.target.closest('.speed-dial-item');
+      if (contactItem) {
+        const name = contactItem.getAttribute('data-name');
+        const number = contactItem.getAttribute('data-number');
+        console.log('[Tel Protocol] Initiating call to:', name, '(' + number + ')');
+      }
+    });
+  </script>
+</body>
+</html>
